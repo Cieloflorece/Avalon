@@ -35,7 +35,6 @@
     overscroll-behavior: none;
   }
 
-  /* ---------- ATMOSPHÄRISCHER HINTERGRUND ---------- */
   .cosmos {
     position: fixed;
     inset: 0;
@@ -105,7 +104,6 @@
     100% { opacity: 1; transform: scale(1.05); }
   }
 
-  /* ---------- APP LAYOUT ---------- */
   .app {
     position: relative;
     z-index: 2;
@@ -114,13 +112,126 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    padding: 20px 18px 90px;
+    padding: 20px 18px 30px;
     overflow-y: auto;
     overflow-x: hidden;
   }
   .app::-webkit-scrollbar { display: none; }
 
-  /* ---------- VIEWS ---------- */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 5;
+  }
+  .menu-btn {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--neon-purple);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .menu-btn:active { transform: scale(0.92); box-shadow: var(--glow-violet); }
+  .top-title {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 12px rgba(192,132,252,0.5);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(10,4,23,0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .sidebar-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 280px;
+    max-width: 82%;
+    z-index: 201;
+    background: linear-gradient(160deg, rgba(26,11,46,0.98), rgba(10,4,23,0.98));
+    border-right: 1.5px solid rgba(168,85,247,0.4);
+    box-shadow: 4px 0 40px rgba(168,85,247,0.35);
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    overflow-y: auto;
+  }
+  .sidebar.show { transform: translateX(0); }
+  .sidebar-header {
+    padding: 0 22px 18px;
+    border-bottom: 1px solid rgba(168,85,247,0.2);
+    margin-bottom: 12px;
+  }
+  .sidebar-title {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(192,132,252,0.6);
+  }
+  .sidebar-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-left: 3px solid transparent;
+    color: var(--text-soft);
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border-top: none; border-right: none; border-bottom: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+  }
+  .sidebar-item .icon { font-size: 20px; }
+  .sidebar-item:active {
+    background: rgba(168,85,247,0.12);
+    border-left-color: var(--neon-violet);
+    color: #fff;
+  }
+  .sidebar-item.active {
+    background: rgba(168,85,247,0.15);
+    border-left-color: var(--neon-violet);
+    color: var(--neon-purple);
+    box-shadow: inset 0 0 20px rgba(168,85,247,0.1);
+  }
+
   .view { display: none; animation: fadeIn 0.5s ease; }
   .view.active { display: block; }
   @keyframes fadeIn {
@@ -128,7 +239,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ---------- PROFIL ---------- */
   .profile {
     display: flex;
     align-items: center;
@@ -196,8 +306,40 @@
     color: var(--neon-purple);
     font-weight: 600;
   }
+  .book-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 0 20px;
+  }
+  .book-btn {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(192,132,252,0.25), rgba(26,11,46,0.9) 70%);
+    border: 2px solid var(--neon-violet);
+    box-shadow: 0 0 40px rgba(168,85,247,0.5), inset 0 0 40px rgba(168,85,247,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 60px;
+    cursor: pointer;
+    transition: all 0.35s;
+    position: relative;
+    animation: breatheBook 4s ease-in-out infinite;
+  }
+  @keyframes breatheBook {
+    0%, 100% { box-shadow: 0 0 40px rgba(168,85,247,0.5), inset 0 0 40px rgba(168,85,247,0.15); }
+    50% { box-shadow: 0 0 65px rgba(168,85,247,0.8), inset 0 0 60px rgba(168,85,247,0.25); }
+  }
+  .book-btn:active { transform: scale(0.94); }
+  .book-btn-label {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--neon-purple);
+    margin-top: 16px;
+    text-shadow: 0 0 12px rgba(168,85,247,0.6);
+  }
 
-  /* ---------- SEKTION TITEL ---------- */
   .section-title {
     font-family: 'Cinzel', serif;
     font-size: 15px;
@@ -207,68 +349,103 @@
     text-align: center;
     margin: 24px 0 16px;
     text-shadow: 0 0 15px rgba(168,85,247,0.5);
-    position: relative;
   }
-  .section-title::before,
-  .section-title::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 30px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--neon-violet));
-  }
-  .section-title::before { left: 12%; }
-  .section-title::after { right: 12%; transform: scaleX(-1); }
 
-  /* ---------- THEMEN-KREISE ---------- */
-  .themes {
+  .stufen-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 14px;
   }
-  .theme-circle {
+  .stufe-card {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
     padding: 18px;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 20px;
+    border-radius: 18px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
     position: relative;
     overflow: hidden;
   }
-  .theme-circle:active {
-    transform: scale(0.97);
-    box-shadow: var(--glow-violet);
+  .stufe-card.unlocked {
+    cursor: pointer;
+    border-color: var(--neon-violet);
+    box-shadow: 0 0 25px rgba(168,85,247,0.35), inset 0 0 20px rgba(168,85,247,0.06);
   }
-  .theme-circle::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(168,85,247,0.3), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.4s;
-    pointer-events: none;
+  .stufe-card.unlocked:active { transform: scale(0.97); }
+  .stufe-card.locked {
+    opacity: 0.45;
+    filter: grayscale(0.6);
   }
-  .theme-circle:active::after { opacity: 1; }
-
-  .theme-orb {
-    width: 66px; height: 66px;
+  .stufe-orb {
+    width: 58px; height: 58px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 30px;
+    font-size: 26px;
     flex-shrink: 0;
-    position: relative;
     background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 60%), #1a0b2e;
-    transition: all 0.3s;
+    position: relative;
   }
-  .theme-orb::before {
+  .stufe-orb.unlocked {
+    border: 2px solid var(--neon-violet);
+    box-shadow: 0 0 25px rgba(168,85,247,0.6);
+  }
+  .stufe-orb.locked {
+    border: 2px solid rgba(155,145,184,0.4);
+  }
+  .stufe-info { flex: 1; }
+  .stufe-name {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .stufe-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .stufe-arrow {
+    color: var(--neon-violet);
+    font-size: 20px;
+    opacity: 0.7;
+  }
+
+  .themes-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .theme-mini {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+  }
+  .theme-mini:active { transform: scale(0.95); }
+  .theme-mini-orb {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 60%), #1a0b2e;
+    position: relative;
+  }
+  .theme-mini-orb::before {
     content: '';
     position: absolute;
     inset: -3px;
@@ -281,52 +458,17 @@
     animation: spin 8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .theme-orb.koerper { --orb-color: #f97316; box-shadow: 0 0 25px rgba(249,115,22,0.5); }
-  .theme-orb.geist { --orb-color: #22d3ee; box-shadow: 0 0 25px rgba(34,211,238,0.5); }
-  .theme-orb.seele { --orb-color: #c084fc; box-shadow: 0 0 25px rgba(192,132,252,0.5); }
-
-  .theme-info { flex: 1; }
-  .theme-name {
+  .theme-mini-orb.koerper { --orb-color: #f97316; box-shadow: 0 0 20px rgba(249,115,22,0.5); }
+  .theme-mini-orb.geist { --orb-color: #22d3ee; box-shadow: 0 0 20px rgba(34,211,238,0.5); }
+  .theme-mini-orb.seele { --orb-color: #c084fc; box-shadow: 0 0 20px rgba(192,132,252,0.5); }
+  .theme-mini-name {
     font-family: 'Cinzel', serif;
-    font-size: 18px;
+    font-size: 13px;
     font-weight: 700;
     color: #fff;
     letter-spacing: 1px;
   }
-  .theme-sub {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
-  .theme-progress {
-    display: flex;
-    gap: 4px;
-    margin-top: 8px;
-  }
-  .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.12);
-    transition: all 0.3s;
-  }
-  .dot.done { background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.7); }
-  .dot.missed { background: #f87171; box-shadow: 0 0 8px rgba(248,113,113,0.6); }
-  .dot.today { background: var(--neon-violet); box-shadow: 0 0 10px var(--neon-violet); animation: pulseDot 2s ease-in-out infinite; }
-  @keyframes pulseDot {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.7; }
-  }
 
-  .arrow {
-    color: var(--neon-violet);
-    font-size: 20px;
-    opacity: 0.7;
-    transition: transform 0.3s;
-  }
-  .theme-circle:active .arrow { transform: translateX(5px); }
-
-  /* ---------- BUTTONS ---------- */
   .btn {
     display: block;
     width: 100%;
@@ -351,17 +493,6 @@
     transform: scale(0.97);
     box-shadow: 0 0 30px rgba(168,85,247,0.7), inset 0 0 20px rgba(168,85,247,0.2);
   }
-  .btn::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 0; height: 0;
-    border-radius: 50%;
-    background: rgba(192,132,252,0.4);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-  }
-  .btn:active::before { width: 400px; height: 400px; }
   .btn.secondary {
     background: rgba(26,11,46,0.6);
     border-color: rgba(168,85,247,0.4);
@@ -369,8 +500,8 @@
     padding: 13px 20px;
     color: var(--text-soft);
   }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
-  /* ---------- QUEST-KARTEN ---------- */
   .quest-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
@@ -387,7 +518,7 @@
     border-color: var(--neon-violet);
   }
   .quest-card.locked {
-    opacity: 0.4;
+    opacity: 0.45;
     filter: grayscale(0.5);
   }
   .quest-card.completed {
@@ -434,7 +565,6 @@
     font-style: italic;
   }
 
-  /* ---------- HEADER MIT ZURÜCK ---------- */
   .view-header {
     display: flex;
     align-items: center;
@@ -468,11 +598,9 @@
     margin-top: 2px;
   }
 
-  /* ---------- TIMER ---------- */
   .timer-display {
     text-align: center;
     margin: 30px 0;
-    position: relative;
   }
   .timer-ring {
     width: 220px; height: 220px;
@@ -513,11 +641,7 @@
     letter-spacing: 1px;
   }
 
-  /* ---------- MAGISCHE KARTE (SEELE) ---------- */
-  .magic-card {
-    perspective: 1000px;
-    margin: 20px 0;
-  }
+  .magic-card { perspective: 1000px; margin: 20px 0; }
   .magic-card-inner {
     background: linear-gradient(145deg, rgba(45,17,80,0.9), rgba(20,10,45,0.95));
     border: 1.5px solid var(--neon-violet);
@@ -532,15 +656,6 @@
     0% { opacity: 0; transform: rotateY(-90deg) scale(0.7); }
     100% { opacity: 1; transform: rotateY(0) scale(1); }
   }
-  .magic-card-inner::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(192,132,252,0.15), transparent 60%);
-    animation: rotate 25s linear infinite;
-    pointer-events: none;
-  }
   .card-type {
     font-family: 'Cinzel', serif;
     font-size: 10px;
@@ -549,14 +664,12 @@
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 16px;
-    position: relative; z-index: 1;
   }
   .card-content {
     font-size: 15px;
     line-height: 1.7;
     color: var(--text-soft);
     text-align: center;
-    position: relative; z-index: 1;
     font-style: italic;
   }
   .card-ornament {
@@ -564,53 +677,50 @@
     font-size: 22px;
     margin: 16px 0;
     color: var(--neon-purple);
-    position: relative; z-index: 1;
     text-shadow: 0 0 15px var(--neon-violet);
   }
 
-  /* ---------- BOTTOM NAV ---------- */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    z-index: 10;
-    max-width: 480px;
-    margin: 0 auto;
+  .log-list {
     display: flex;
-    justify-content: space-around;
-    padding: 12px 18px 20px;
-    background: linear-gradient(180deg, transparent, rgba(10,4,23,0.95) 30%);
+    flex-direction: column;
+    gap: 12px;
+  }
+  .log-entry {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-left: 4px solid var(--neon-violet);
+    border-radius: 14px;
+    padding: 14px 16px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 14px;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 1px solid transparent;
-    background: transparent;
-    color: var(--text-dim);
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+  .log-entry.koerper { border-left-color: #f97316; }
+  .log-entry.geist { border-left-color: #22d3ee; }
+  .log-entry.seele { border-left-color: #c084fc; }
+  .log-entry-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
   }
-  .nav-item .icon { font-size: 20px; }
-  .nav-item.active {
+  .log-entry-meta {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .log-entry-meta .xp {
     color: var(--neon-purple);
-    background: rgba(168,85,247,0.1);
-    border-color: rgba(168,85,247,0.3);
-    box-shadow: 0 0 15px rgba(168,85,247,0.2);
+    font-weight: 600;
   }
 
-  /* ---------- MODAL ---------- */
   .modal-overlay {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    z-index: 300;
     background: rgba(10,4,23,0.85);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -657,7 +767,6 @@
     margin-bottom: 20px;
   }
 
-  /* ---------- INPUT ---------- */
   .input-field {
     width: 100%;
     padding: 14px 16px;
@@ -677,7 +786,6 @@
   }
   .input-field::placeholder { color: var(--text-dim); }
 
-  /* ---------- INTRO ---------- */
   .intro {
     text-align: center;
     padding: 40px 20px;
@@ -726,6 +834,27 @@
 <div class="stars3"></div>
 <div class="nebula"></div>
 
+<!-- ============ SIDEBAR ============ -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">DER WEG<br>DES MAGIERS</div>
+    <div class="sidebar-sub">Dein magisches Buch</div>
+  </div>
+  <button class="sidebar-item" id="side-profil" onclick="goProfil()">
+    <span class="icon">🧙</span>
+    <span>Spielerprofil</span>
+  </button>
+  <button class="sidebar-item" id="side-logbuch" onclick="goLogbuch()">
+    <span class="icon">📜</span>
+    <span>Logbuch</span>
+  </button>
+  <button class="sidebar-item" id="side-buch" onclick="goBuch()">
+    <span class="icon">📖</span>
+    <span>Das magische Buch</span>
+  </button>
+</aside>
+
 <div class="app" id="app">
 
   <!-- ============ VIEW: INTRO / CHARAKTERERSTELLUNG ============ -->
@@ -739,8 +868,13 @@
     </div>
   </div>
 
-  <!-- ============ VIEW: STARTSEITE / HUB ============ -->
-  <div class="view" id="view-home">
+  <!-- ============ VIEW: PROFIL (STARTSEITE) ============ -->
+  <div class="view" id="view-profil">
+    <div class="top-bar">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="top-title">Spielerprofil</div>
+    </div>
+
     <div class="profile">
       <div class="avatar" id="home-avatar">🧙</div>
       <div class="profile-info">
@@ -753,48 +887,153 @@
       </div>
     </div>
 
-    <div class="section-title">Deine Pfade</div>
+    <div class="book-btn-wrap">
+      <div class="book-btn" onclick="goBuch()">📖</div>
+      <div class="book-btn-label">Das magische Buch</div>
+    </div>
+  </div>
 
-    <div class="themes">
-      <div class="theme-circle" onclick="openTheme('koerper')">
-        <div class="theme-orb koerper">🔥</div>
-        <div class="theme-info">
-          <div class="theme-name">Körper</div>
-          <div class="theme-sub">Level 1 · 4 Quests</div>
-          <div class="theme-progress" id="dots-koerper"></div>
+  <!-- ============ VIEW: DAS MAGISCHE BUCH (STUFEN) ============ -->
+  <div class="view" id="view-buch">
+    <div class="top-bar">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="top-title">Das magische Buch</div>
+    </div>
+
+    <div class="section-title">Wähle deine Stufe</div>
+
+    <div class="stufen-list">
+      <div class="stufe-card unlocked" onclick="openStufe(1)">
+        <div class="stufe-orb unlocked">✨</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 1</div>
+          <div class="stufe-sub">Der Anfang · freigeschaltet</div>
         </div>
-        <div class="arrow">›</div>
+        <div class="stufe-arrow">›</div>
       </div>
-
-      <div class="theme-circle" onclick="openTheme('geist')">
-        <div class="theme-orb geist">💠</div>
-        <div class="theme-info">
-          <div class="theme-name">Geist</div>
-          <div class="theme-sub">Level 1 · Morgen & Abend</div>
-          <div class="theme-progress" id="dots-geist"></div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 2</div>
+          <div class="stufe-sub">Noch verschlossen</div>
         </div>
-        <div class="arrow">›</div>
       </div>
-
-      <div class="theme-circle" onclick="openTheme('seele')">
-        <div class="theme-orb seele">🌙</div>
-        <div class="theme-info">
-          <div class="theme-name">Seele</div>
-          <div class="theme-sub">Level 1 · Inspirationskarten</div>
-          <div class="theme-progress" id="dots-seele"></div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 3</div>
+          <div class="stufe-sub">Noch verschlossen</div>
         </div>
-        <div class="arrow">›</div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 4</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 5</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 6</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 7</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 8</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 9</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 10</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 11</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+      <div class="stufe-card locked">
+        <div class="stufe-orb locked">🔒</div>
+        <div class="stufe-info">
+          <div class="stufe-name">Stufe 12</div>
+          <div class="stufe-sub">Noch verschlossen</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ VIEW: STUFE 1 (THEMEN NEBENEINANDER) ============ -->
+  <div class="view" id="view-stufe1">
+    <div class="top-bar">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="top-title">Stufe 1</div>
+    </div>
+
+    <div class="view-header">
+      <button class="back-btn" onclick="goBuch()">‹</button>
+      <div>
+        <div class="view-title">Stufe 1</div>
+        <div class="view-sub">Wähle deinen Pfad</div>
+      </div>
+    </div>
+
+    <div class="themes-row">
+      <div class="theme-mini" onclick="openTheme('koerper')">
+        <div class="theme-mini-orb koerper">🔥</div>
+        <div class="theme-mini-name">Körper</div>
+      </div>
+      <div class="theme-mini" onclick="openTheme('geist')">
+        <div class="theme-mini-orb geist">💠</div>
+        <div class="theme-mini-name">Geist</div>
+      </div>
+      <div class="theme-mini" onclick="openTheme('seele')">
+        <div class="theme-mini-orb seele">🌙</div>
+        <div class="theme-mini-name">Seele</div>
       </div>
     </div>
   </div>
 
   <!-- ============ VIEW: KÖRPER ============ -->
   <div class="view" id="view-koerper">
+    <div class="top-bar">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="top-title">Körper</div>
+    </div>
+
     <div class="view-header">
-      <button class="back-btn" onclick="goHome()">‹</button>
+      <button class="back-btn" onclick="goStufe1()">‹</button>
       <div>
         <div class="view-title">Körper</div>
-        <div class="view-sub">Level 1 · Start in den Tag</div>
+        <div class="view-sub">Stufe 1 · Start in den Tag</div>
       </div>
     </div>
 
@@ -839,11 +1078,16 @@
 
   <!-- ============ VIEW: GEIST ============ -->
   <div class="view" id="view-geist">
+    <div class="top-bar">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="top-title">Geist</div>
+    </div>
+
     <div class="view-header">
-      <button class="back-btn" onclick="goHome()">‹</button>
+      <button class="back-btn" onclick="goStufe1()">‹</button>
       <div>
         <div class="view-title">Geist</div>
-        <div class="view-sub">Level 1 · Beobachte deine Gedanken</div>
+        <div class="view-sub">Stufe 1 · Beobachte deine Gedanken</div>
       </div>
     </div>
 
@@ -871,11 +1115,16 @@
 
   <!-- ============ VIEW: SEELE ============ -->
   <div class="view" id="view-seele">
+    <div class="top-bar">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="top-title">Seele</div>
+    </div>
+
     <div class="view-header">
-      <button class="back-btn" onclick="goHome()">‹</button>
+      <button class="back-btn" onclick="goStufe1()">‹</button>
       <div>
         <div class="view-title">Seele</div>
-        <div class="view-sub">Level 1 · Die Schatten erkennen</div>
+        <div class="view-sub">Stufe 1 · Die Schatten erkennen</div>
       </div>
     </div>
 
@@ -891,28 +1140,40 @@
     </div>
 
     <button class="btn" id="card-done-btn" onclick="completeCard()">Karte als gelesen markieren</button>
+
+    <div class="quest-card locked" style="margin-top:20px;">
+      <div class="quest-head">
+        <span class="quest-num">Quest 2</span>
+        <span class="quest-status-icon">🔒</span>
+      </div>
+      <div class="quest-title">Elemente zuordnen</div>
+      <div class="quest-desc">Wird freigeschaltet, sobald Quest 1 gemeistert ist.</div>
+    </div>
+
+    <div class="quest-card locked">
+      <div class="quest-head">
+        <span class="quest-num">Quest 3</span>
+        <span class="quest-status-icon">🔒</span>
+      </div>
+      <div class="quest-title">Gewichtung</div>
+      <div class="quest-desc">Wird später freigeschaltet.</div>
+    </div>
   </div>
 
-</div>
+  <!-- ============ VIEW: LOGBUCH ============ -->
+  <div class="view" id="view-logbuch">
+    <div class="top-bar">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="top-title">Logbuch</div>
+    </div>
 
-<!-- ============ BOTTOM NAV ============ -->
-<div class="bottom-nav">
-  <button class="nav-item active" onclick="goHome()" id="nav-home">
-    <span class="icon">🏠</span>
-    <span>Start</span>
-  </button>
-  <button class="nav-item" onclick="openTheme('koerper')" id="nav-koerper">
-    <span class="icon">🔥</span>
-    <span>Körper</span>
-  </button>
-  <button class="nav-item" onclick="openTheme('geist')" id="nav-geist">
-    <span class="icon">💠</span>
-    <span>Geist</span>
-  </button>
-  <button class="nav-item" onclick="openTheme('seele')" id="nav-seele">
-    <span class="icon">🌙</span>
-    <span>Seele</span>
-  </button>
+    <div class="section-title">Deine Erfolge</div>
+
+    <div class="log-list" id="log-list">
+      <div class="empty-note" id="log-empty">Noch keine Einträge. Deine Reise beginnt mit der ersten Mission.</div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ============ MODAL ============ -->
@@ -936,19 +1197,20 @@ const defaultState = {
   startDate: null,
   koerper: {
     quest1Accepted: false,
-    quest1Days: 0,      // abgeschlossene Tage
+    quest1Days: 0,
     quest1DoneToday: false,
   },
   geist: {
     quest1Accepted: false,
-    timerSeconds: 240,  // 4 Minuten Start
+    timerSeconds: 240,
     timerRunning: false,
     quest1Days: 0,
   },
   seele: {
     quest1Accepted: false,
     cardRead: false,
-  }
+  },
+  log: []
 };
 
 let state = loadState();
@@ -956,12 +1218,23 @@ let state = loadState();
 function loadState() {
   try {
     const raw = localStorage.getItem(STATE_KEY);
-    if (!raw) return { ...defaultState };
-    return { ...defaultState, ...JSON.parse(raw) };
-  } catch { return { ...defaultState }; }
+    if (!raw) return JSON.parse(JSON.stringify(defaultState));
+    const parsed = JSON.parse(raw);
+    return Object.assign(JSON.parse(JSON.stringify(defaultState)), parsed);
+  } catch { return JSON.parse(JSON.stringify(defaultState)); }
 }
 function saveState() {
   try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch {}
+}
+
+/* ================== SIDEBAR ================== */
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('show');
+  document.getElementById('sidebar-overlay').classList.add('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('show');
+  document.getElementById('sidebar-overlay').classList.remove('show');
 }
 
 /* ================== INTRO ================== */
@@ -971,30 +1244,37 @@ function createMage() {
   state.name = name;
   state.startDate = new Date().toISOString();
   saveState();
-  renderHome();
-  showView('view-home');
+  renderProfil();
+  showView('view-profil');
 }
 
 /* ================== NAVIGATION ================== */
 function showView(id) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
   window.scrollTo(0, 0);
   document.getElementById('app').scrollTop = 0;
-  updateNav(id);
+  updateSidebar(id);
+  closeSidebar();
 }
-function updateNav(id) {
+
+function updateSidebar(id) {
   const map = {
-    'view-home': 'nav-home',
-    'view-koerper': 'nav-koerper',
-    'view-geist': 'nav-geist',
-    'view-seele': 'nav-seele',
+    'view-profil': 'side-profil',
+    'view-logbuch': 'side-logbuch',
+    'view-buch': 'side-buch',
   };
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(n => n.classList.remove('active'));
   const active = map[id];
   if (active) document.getElementById(active).classList.add('active');
 }
-function goHome() { renderHome(); showView('view-home'); }
+
+function goProfil() { renderProfil(); showView('view-profil'); }
+function goLogbuch() { renderLogbuch(); showView('view-logbuch'); }
+function goBuch() { showView('view-buch'); }
+function goStufe1() { showView('view-stufe1'); }
+function openStufe(n) { if (n === 1) showView('view-stufe1'); }
 
 function openTheme(theme) {
   if (theme === 'koerper') { renderKoerper(); showView('view-koerper'); }
@@ -1002,36 +1282,62 @@ function openTheme(theme) {
   if (theme === 'seele')   { renderSeele();   showView('view-seele'); }
 }
 
-/* ================== HOME RENDER ================== */
-function renderHome() {
+/* ================== PROFIL RENDER ================== */
+function renderProfil() {
   document.getElementById('home-name').textContent = state.name || 'Magier';
   document.getElementById('home-level').textContent = state.level;
   document.getElementById('home-xp').textContent = state.xp + ' XP';
   document.getElementById('home-avatar').textContent = '🧙';
 
-  // Tagesanzeige
   const day = state.startDate
     ? Math.max(1, Math.floor((Date.now() - new Date(state.startDate)) / 86400000) + 1)
     : 1;
   document.getElementById('home-day').textContent = day;
-
-  // Punkte für jedes Thema
-  renderDots('koerper', state.koerper.quest1Days, 7);
-  renderDots('geist', state.geist.quest1Days, 7);
-  renderDots('seele', state.seele.cardRead ? 1 : 0, 7);
 }
 
-function renderDots(theme, done, total) {
-  const container = document.getElementById('dots-' + theme);
-  if (!container) return;
-  container.innerHTML = '';
-  for (let i = 0; i < total; i++) {
-    const d = document.createElement('div');
-    d.className = 'dot';
-    if (i < done) d.classList.add('done');
-    else if (i === done && done < total) d.classList.add('today');
-    container.appendChild(d);
+/* ================== LOGBUCH ================== */
+function addLogEntry(theme, title, xp) {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  state.log.unshift({
+    theme: theme,
+    title: title,
+    xp: xp,
+    date: dateStr,
+    time: timeStr,
+    ts: now.getTime()
+  });
+  if (state.log.length > 200) state.log = state.log.slice(0, 200);
+  saveState();
+}
+
+function renderLogbuch() {
+  const list = document.getElementById('log-list');
+  if (!state.log || state.log.length === 0) {
+    list.innerHTML = '<div class="empty-note">Noch keine Einträge. Deine Reise beginnt mit der ersten Mission.</div>';
+    return;
   }
+  list.innerHTML = '';
+  state.log.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'log-entry ' + (e.theme || '');
+    div.innerHTML = `
+      <div class="log-entry-title">${escapeHtml(e.title)}</div>
+      <div class="log-entry-meta">
+        <span>📅 ${e.date}</span>
+        <span>🕐 ${e.time} Uhr</span>
+        <span class="xp">+${e.xp} XP</span>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
 }
 
 /* ================== KÖRPER ================== */
@@ -1045,18 +1351,16 @@ function renderKoerper() {
     head.textContent = '✅';
     btn.textContent = 'Heute abgeschlossen';
     btn.disabled = true;
-    btn.style.opacity = '0.6';
+    btn.onclick = null;
   } else if (q1.quest1Accepted) {
     head.textContent = '⏳';
     btn.textContent = 'Heute als erledigt markieren';
     btn.disabled = false;
-    btn.style.opacity = '1';
     btn.onclick = () => completeKoerperDay();
   } else {
     head.textContent = '🔥';
     btn.textContent = 'Quest annehmen';
     btn.disabled = false;
-    btn.style.opacity = '1';
     btn.onclick = () => acceptQuest('koerper');
   }
 }
@@ -1075,6 +1379,7 @@ function completeKoerperDay() {
   state.koerper.quest1DoneToday = true;
   state.koerper.quest1Days = Math.min(7, state.koerper.quest1Days + 1);
   state.xp += 10;
+  addLogEntry('koerper', 'Körper · Start in den Tag', 10);
   saveState();
   showModal('✨', 'Tag gemeistert!', 'Du hast deine heutige Aufgabe abgeschlossen. +10 XP. Dein Körper dankt dir.');
   renderKoerper();
@@ -1083,7 +1388,6 @@ function completeKoerperDay() {
 /* ================== GEIST (TIMER) ================== */
 let timerInterval = null;
 let timerRemaining = 240;
-let timerPaused = false;
 
 function renderGeist() {
   timerRemaining = state.geist.timerSeconds;
@@ -1096,9 +1400,9 @@ function renderGeist() {
 function updateTimerDisplay() {
   const m = Math.floor(timerRemaining / 60).toString().padStart(2, '0');
   const s = (timerRemaining % 60).toString().padStart(2, '0');
-  document.getElementById('timer-value').textContent = `${m}:${s}`;
+  document.getElementById('timer-value').textContent = m + ':' + s;
   const day = Math.min(7, state.geist.quest1Days + 1);
-  document.getElementById('timer-day').textContent = `Tag ${day} · Morgen`;
+  document.getElementById('timer-day').textContent = 'Tag ' + day + ' · Morgen';
 }
 
 function startTimer() {
@@ -1108,7 +1412,6 @@ function startTimer() {
     saveState();
   }
   state.geist.timerRunning = true;
-  timerPaused = false;
   document.getElementById('timer-start-btn').textContent = 'Läuft …';
   timerInterval = setInterval(() => {
     if (timerRemaining > 0) {
@@ -1119,9 +1422,9 @@ function startTimer() {
       timerInterval = null;
       state.geist.timerRunning = false;
       state.geist.quest1Days = Math.min(7, state.geist.quest1Days + 1);
-      // nächster Tag: +1 Minute (max 10)
       state.geist.timerSeconds = Math.min(600, state.geist.timerSeconds + 60);
       state.xp += 15;
+      addLogEntry('geist', 'Geist · Beobachte deine Gedanken', 15);
       saveState();
       showModal('💠', 'Geist gestärkt!', 'Deine heutige Mission ist abgeschlossen. +15 XP. Der Timer wächst mit dir.');
       document.getElementById('timer-start-btn').textContent = 'Mission starten';
@@ -1147,12 +1450,10 @@ function renderSeele() {
   if (state.seele.cardRead) {
     btn.textContent = 'Karte bereits gelesen';
     btn.disabled = true;
-    btn.style.opacity = '0.6';
     if (card) card.style.boxShadow = '0 0 35px rgba(74,222,128,0.5), inset 0 0 30px rgba(74,222,128,0.1)';
   } else {
     btn.textContent = 'Karte als gelesen markieren';
     btn.disabled = false;
-    btn.style.opacity = '1';
   }
 }
 
@@ -1160,6 +1461,7 @@ function completeCard() {
   if (state.seele.cardRead) return;
   state.seele.cardRead = true;
   state.xp += 5;
+  addLogEntry('seele', 'Seele · Karte des Tages', 5);
   saveState();
   showModal('🌙', 'Karte gelesen', 'Deine Seele hat eine neue Erkenntnis aufgenommen. +5 XP.');
   renderSeele();
@@ -1179,8 +1481,8 @@ function closeModal() {
 /* ================== INIT ================== */
 window.addEventListener('load', () => {
   if (state.name) {
-    renderHome();
-    showView('view-home');
+    renderProfil();
+    showView('view-profil');
   } else {
     showView('view-intro');
   }
@@ -1188,4 +1490,3 @@ window.addEventListener('load', () => {
 </script>
 </body>
 </html>
-
