@@ -114,11 +114,127 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    padding: 20px 18px 90px;
+    padding: 20px 18px 30px;
     overflow-y: auto;
     overflow-x: hidden;
   }
   .app::-webkit-scrollbar { display: none; }
+
+  /* ---------- TOP BAR MIT MENÜ ---------- */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 5;
+  }
+  .menu-btn {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--neon-purple);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .menu-btn:active { transform: scale(0.92); box-shadow: var(--glow-violet); }
+  .top-title {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 12px rgba(192,132,252,0.5);
+  }
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(10,4,23,0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .sidebar-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 280px;
+    max-width: 82%;
+    z-index: 201;
+    background: linear-gradient(160deg, rgba(26,11,46,0.98), rgba(10,4,23,0.98));
+    border-right: 1.5px solid rgba(168,85,247,0.4);
+    box-shadow: 4px 0 40px rgba(168,85,247,0.35);
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    overflow-y: auto;
+  }
+  .sidebar.show { transform: translateX(0); }
+  .sidebar-header {
+    padding: 0 22px 18px;
+    border-bottom: 1px solid rgba(168,85,247,0.2);
+    margin-bottom: 12px;
+  }
+  .sidebar-title {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(192,132,252,0.6);
+  }
+  .sidebar-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-left: 3px solid transparent;
+    color: var(--text-soft);
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border-top: none; border-right: none; border-bottom: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+  }
+  .sidebar-item .icon { font-size: 20px; }
+  .sidebar-item:active {
+    background: rgba(168,85,247,0.12);
+    border-left-color: var(--neon-violet);
+    color: #fff;
+  }
+  .sidebar-item.active {
+    background: rgba(168,85,247,0.15);
+    border-left-color: var(--neon-violet);
+    color: var(--neon-purple);
+    box-shadow: inset 0 0 20px rgba(168,85,247,0.1);
+  }
 
   /* ---------- VIEWS ---------- */
   .view { display: none; animation: fadeIn 0.5s ease; }
@@ -197,6 +313,41 @@
     font-weight: 600;
   }
 
+  /* ---------- BUCH-SYMBOL BUTTON ---------- */
+  .book-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 0 20px;
+  }
+  .book-btn {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(192,132,252,0.25), rgba(26,11,46,0.9) 70%);
+    border: 2px solid var(--neon-violet);
+    box-shadow: 0 0 40px rgba(168,85,247,0.5), inset 0 0 40px rgba(168,85,247,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 60px;
+    cursor: pointer;
+    transition: all 0.35s;
+    position: relative;
+    animation: breatheBook 4s ease-in-out infinite;
+  }
+  @keyframes breatheBook {
+    0%, 100% { box-shadow: 0 0 40px rgba(168,85,247,0.5), inset 0 0 40px rgba(168,85,247,0.15); }
+    50% { box-shadow: 0 0 65px rgba(168,85,247,0.8), inset 0 0 60px rgba(168,85,247,0.25); }
+  }
+  .book-btn:active { transform: scale(0.94); }
+  .book-btn-label {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--neon-purple);
+    margin-top: 16px;
+    text-shadow: 0 0 12px rgba(168,85,247,0.6);
+  }
+
   /* ---------- SEKTION TITEL ---------- */
   .section-title {
     font-family: 'Cinzel', serif;
@@ -209,66 +360,104 @@
     text-shadow: 0 0 15px rgba(168,85,247,0.5);
     position: relative;
   }
-  .section-title::before,
-  .section-title::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 30px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--neon-violet));
-  }
-  .section-title::before { left: 12%; }
-  .section-title::after { right: 12%; transform: scaleX(-1); }
 
-  /* ---------- THEMEN-KREISE ---------- */
-  .themes {
+  /* ---------- STUFEN (DAS MAGISCHE BUCH) ---------- */
+  .stufen-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 14px;
   }
-  .theme-circle {
+  .stufe-card {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
     padding: 18px;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 20px;
+    border-radius: 18px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
     position: relative;
     overflow: hidden;
   }
-  .theme-circle:active {
-    transform: scale(0.97);
-    box-shadow: var(--glow-violet);
+  .stufe-card.unlocked {
+    cursor: pointer;
+    border-color: var(--neon-violet);
+    box-shadow: 0 0 25px rgba(168,85,247,0.35), inset 0 0 20px rgba(168,85,247,0.06);
   }
-  .theme-circle::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(168,85,247,0.3), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.4s;
-    pointer-events: none;
+  .stufe-card.unlocked:active { transform: scale(0.97); }
+  .stufe-card.locked {
+    opacity: 0.45;
+    filter: grayscale(0.6);
   }
-  .theme-circle:active::after { opacity: 1; }
-
-  .theme-orb {
-    width: 66px; height: 66px;
+  .stufe-orb {
+    width: 58px; height: 58px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 30px;
+    font-size: 26px;
     flex-shrink: 0;
-    position: relative;
     background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 60%), #1a0b2e;
-    transition: all 0.3s;
+    position: relative;
   }
-  .theme-orb::before {
+  .stufe-orb.unlocked {
+    border: 2px solid var(--neon-violet);
+    box-shadow: 0 0 25px rgba(168,85,247,0.6);
+  }
+  .stufe-orb.locked {
+    border: 2px solid rgba(155,145,184,0.4);
+  }
+  .stufe-info { flex: 1; }
+  .stufe-name {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .stufe-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .stufe-arrow {
+    color: var(--neon-violet);
+    font-size: 20px;
+    opacity: 0.7;
+  }
+
+  /* ---------- THEMEN (KÖRPER / GEIST / SEELE NEBENEINANDER) ---------- */
+  .themes-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .theme-mini {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+  }
+  .theme-mini:active { transform: scale(0.95); }
+  .theme-mini-orb {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 60%), #1a0b2e;
+    position: relative;
+  }
+  .theme-mini-orb::before {
     content: '';
     position: absolute;
     inset: -3px;
@@ -281,50 +470,16 @@
     animation: spin 8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .theme-orb.koerper { --orb-color: #f97316; box-shadow: 0 0 25px rgba(249,115,22,0.5); }
-  .theme-orb.geist { --orb-color: #22d3ee; box-shadow: 0 0 25px rgba(34,211,238,0.5); }
-  .theme-orb.seele { --orb-color: #c084fc; box-shadow: 0 0 25px rgba(192,132,252,0.5); }
-
-  .theme-info { flex: 1; }
-  .theme-name {
+  .theme-mini-orb.koerper { --orb-color: #f97316; box-shadow: 0 0 20px rgba(249,115,22,0.5); }
+  .theme-mini-orb.geist { --orb-color: #22d3ee; box-shadow: 0 0 20px rgba(34,211,238,0.5); }
+  .theme-mini-orb.seele { --orb-color: #c084fc; box-shadow: 0 0 20px rgba(192,132,252,0.5); }
+  .theme-mini-name {
     font-family: 'Cinzel', serif;
-    font-size: 18px;
+    font-size: 13px;
     font-weight: 700;
     color: #fff;
     letter-spacing: 1px;
   }
-  .theme-sub {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
-  .theme-progress {
-    display: flex;
-    gap: 4px;
-    margin-top: 8px;
-  }
-  .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.12);
-    transition: all 0.3s;
-  }
-  .dot.done { background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.7); }
-  .dot.missed { background: #f87171; box-shadow: 0 0 8px rgba(248,113,113,0.6); }
-  .dot.today { background: var(--neon-violet); box-shadow: 0 0 10px var(--neon-violet); animation: pulseDot 2s ease-in-out infinite; }
-  @keyframes pulseDot {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.7; }
-  }
-
-  .arrow {
-    color: var(--neon-violet);
-    font-size: 20px;
-    opacity: 0.7;
-    transition: transform 0.3s;
-  }
-  .theme-circle:active .arrow { transform: translateX(5px); }
 
   /* ---------- BUTTONS ---------- */
   .btn {
@@ -351,17 +506,6 @@
     transform: scale(0.97);
     box-shadow: 0 0 30px rgba(168,85,247,0.7), inset 0 0 20px rgba(168,85,247,0.2);
   }
-  .btn::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 0; height: 0;
-    border-radius: 50%;
-    background: rgba(192,132,252,0.4);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-  }
-  .btn:active::before { width: 400px; height: 400px; }
   .btn.secondary {
     background: rgba(26,11,46,0.6);
     border-color: rgba(168,85,247,0.4);
@@ -369,6 +513,7 @@
     padding: 13px 20px;
     color: var(--text-soft);
   }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
   /* ---------- QUEST-KARTEN ---------- */
   .quest-card {
@@ -387,7 +532,7 @@
     border-color: var(--neon-violet);
   }
   .quest-card.locked {
-    opacity: 0.4;
+    opacity: 0.45;
     filter: grayscale(0.5);
   }
   .quest-card.completed {
@@ -472,7 +617,6 @@
   .timer-display {
     text-align: center;
     margin: 30px 0;
-    position: relative;
   }
   .timer-ring {
     width: 220px; height: 220px;
@@ -514,10 +658,7 @@
   }
 
   /* ---------- MAGISCHE KARTE (SEELE) ---------- */
-  .magic-card {
-    perspective: 1000px;
-    margin: 20px 0;
-  }
+  .magic-card { perspective: 1000px; margin: 20px 0; }
   .magic-card-inner {
     background: linear-gradient(145deg, rgba(45,17,80,0.9), rgba(20,10,45,0.95));
     border: 1.5px solid var(--neon-violet);
@@ -532,15 +673,6 @@
     0% { opacity: 0; transform: rotateY(-90deg) scale(0.7); }
     100% { opacity: 1; transform: rotateY(0) scale(1); }
   }
-  .magic-card-inner::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(192,132,252,0.15), transparent 60%);
-    animation: rotate 25s linear infinite;
-    pointer-events: none;
-  }
   .card-type {
     font-family: 'Cinzel', serif;
     font-size: 10px;
@@ -549,14 +681,12 @@
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 16px;
-    position: relative; z-index: 1;
   }
   .card-content {
     font-size: 15px;
     line-height: 1.7;
     color: var(--text-soft);
     text-align: center;
-    position: relative; z-index: 1;
     font-style: italic;
   }
   .card-ornament {
@@ -564,53 +694,52 @@
     font-size: 22px;
     margin: 16px 0;
     color: var(--neon-purple);
-    position: relative; z-index: 1;
     text-shadow: 0 0 15px var(--neon-violet);
   }
 
-  /* ---------- BOTTOM NAV ---------- */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    z-index: 10;
-    max-width: 480px;
-    margin: 0 auto;
+  /* ---------- LOGBUCH ---------- */
+  .log-list {
     display: flex;
-    justify-content: space-around;
-    padding: 12px 18px 20px;
-    background: linear-gradient(180deg, transparent, rgba(10,4,23,0.95) 30%);
+    flex-direction: column;
+    gap: 12px;
+  }
+  .log-entry {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-left: 4px solid var(--neon-violet);
+    border-radius: 14px;
+    padding: 14px 16px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 14px;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 1px solid transparent;
-    background: transparent;
-    color: var(--text-dim);
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+  .log-entry.koerper { border-left-color: #f97316; }
+  .log-entry.geist { border-left-color: #22d3ee; }
+  .log-entry.seele { border-left-color: #c084fc; }
+  .log-entry-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
   }
-  .nav-item .icon { font-size: 20px; }
-  .nav-item.active {
+  .log-entry-meta {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .log-entry-meta .xp {
     color: var(--neon-purple);
-    background: rgba(168,85,247,0.1);
-    border-color: rgba(168,85,247,0.3);
-    box-shadow: 0 0 15px rgba(168,85,247,0.2);
+    font-weight: 600;
   }
 
   /* ---------- MODAL ---------- */
   .modal-overlay {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    z-index: 300;
     background: rgba(10,4,23,0.85);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -685,506 +814,4 @@
   .intro-symbol {
     font-size: 70px;
     margin-bottom: 20px;
-    filter: drop-shadow(0 0 30px var(--neon-violet));
-    animation: float 4s ease-in-out infinite;
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-  }
-  .intro-title {
-    font-family: 'Cinzel', serif;
-    font-size: 30px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 3px;
-    text-shadow: 0 0 25px rgba(192,132,252,0.8);
-    margin-bottom: 12px;
-  }
-  .intro-sub {
-    font-size: 14px;
-    color: var(--text-dim);
-    line-height: 1.6;
-    margin-bottom: 30px;
-    letter-spacing: 1px;
-  }
-
-  .empty-note {
-    text-align: center;
-    padding: 30px 20px;
-    font-size: 13px;
-    color: var(--text-dim);
-    font-style: italic;
-  }
-</style>
-</head>
-<body>
-
-<div class="cosmos"></div>
-<div class="stars"></div>
-<div class="stars2"></div>
-<div class="stars3"></div>
-<div class="nebula"></div>
-
-<div class="app" id="app">
-
-  <!-- ============ VIEW: INTRO / CHARAKTERERSTELLUNG ============ -->
-  <div class="view active" id="view-intro">
-    <div class="intro">
-      <div class="intro-symbol">✦</div>
-      <div class="intro-title">DER WEG<br>DES MAGIERS</div>
-      <div class="intro-sub">Ein magisches Buch öffnet sich.<br>Betrete deine eigene Welt.</div>
-      <input type="text" class="input-field" id="intro-name" placeholder="Wie lautet dein Magiername?" maxlength="20" autocomplete="off">
-      <button class="btn" onclick="createMage()">Das Buch öffnen</button>
-    </div>
-  </div>
-
-  <!-- ============ VIEW: STARTSEITE / HUB ============ -->
-  <div class="view" id="view-home">
-    <div class="profile">
-      <div class="avatar" id="home-avatar">🧙</div>
-      <div class="profile-info">
-        <div class="profile-name" id="home-name">Magier</div>
-        <div class="profile-meta">
-          <span>⭐ Level <b id="home-level">1</b></span>
-          <span>📖 Tag <b id="home-day">1</b></span>
-          <span class="badge-xp" id="home-xp">0 XP</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-title">Deine Pfade</div>
-
-    <div class="themes">
-      <div class="theme-circle" onclick="openTheme('koerper')">
-        <div class="theme-orb koerper">🔥</div>
-        <div class="theme-info">
-          <div class="theme-name">Körper</div>
-          <div class="theme-sub">Level 1 · 4 Quests</div>
-          <div class="theme-progress" id="dots-koerper"></div>
-        </div>
-        <div class="arrow">›</div>
-      </div>
-
-      <div class="theme-circle" onclick="openTheme('geist')">
-        <div class="theme-orb geist">💠</div>
-        <div class="theme-info">
-          <div class="theme-name">Geist</div>
-          <div class="theme-sub">Level 1 · Morgen & Abend</div>
-          <div class="theme-progress" id="dots-geist"></div>
-        </div>
-        <div class="arrow">›</div>
-      </div>
-
-      <div class="theme-circle" onclick="openTheme('seele')">
-        <div class="theme-orb seele">🌙</div>
-        <div class="theme-info">
-          <div class="theme-name">Seele</div>
-          <div class="theme-sub">Level 1 · Inspirationskarten</div>
-          <div class="theme-progress" id="dots-seele"></div>
-        </div>
-        <div class="arrow">›</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ VIEW: KÖRPER ============ -->
-  <div class="view" id="view-koerper">
-    <div class="view-header">
-      <button class="back-btn" onclick="goHome()">‹</button>
-      <div>
-        <div class="view-title">Körper</div>
-        <div class="view-sub">Level 1 · Start in den Tag</div>
-      </div>
-    </div>
-
-    <div class="quest-card active" id="kq1">
-      <div class="quest-head">
-        <span class="quest-num">Quest 1 · Tag 1–7</span>
-        <span class="quest-status-icon">🔥</span>
-      </div>
-      <div class="quest-title">Start in den Tag</div>
-      <div class="quest-desc">Zu Beginn des Tages schenkst du dir einen stillen Moment. Mit einer Trockenbürste schrubst du deine Haut sanft, bis sie leicht rosig schimmert. Danach lässt du kaltes Wasser über deinen Körper oder dein Gesicht fließen und hüllst dich in ein weiches Handtuch. Zum Abschluss zwei Minuten Morgengymnastik.</div>
-      <div class="quest-tip">Tipp: Beginne erst, wenn Trockenbürste, Handtuch und vertraute Übungen bereitliegen.</div>
-      <button class="btn" id="kq1-btn" style="margin-top:16px;" onclick="acceptQuest('koerper')">Quest annehmen</button>
-    </div>
-
-    <div class="quest-card locked">
-      <div class="quest-head">
-        <span class="quest-num">Quest 2</span>
-        <span class="quest-status-icon">🔒</span>
-      </div>
-      <div class="quest-title">Die Magie des Atems</div>
-      <div class="quest-desc">Wird freigeschaltet, sobald Quest 1 gemeistert ist.</div>
-    </div>
-
-    <div class="quest-card locked">
-      <div class="quest-head">
-        <span class="quest-num">Quest 3</span>
-        <span class="quest-status-icon">🔒</span>
-      </div>
-      <div class="quest-title">Die Magie der Nahrung</div>
-      <div class="quest-desc">Wird später freigeschaltet.</div>
-    </div>
-
-    <div class="quest-card locked">
-      <div class="quest-head">
-        <span class="quest-num">Quest 4</span>
-        <span class="quest-status-icon">🔒</span>
-      </div>
-      <div class="quest-title">Die Magie des Wassers</div>
-      <div class="quest-desc">Wird später freigeschaltet.</div>
-    </div>
-  </div>
-
-  <!-- ============ VIEW: GEIST ============ -->
-  <div class="view" id="view-geist">
-    <div class="view-header">
-      <button class="back-btn" onclick="goHome()">‹</button>
-      <div>
-        <div class="view-title">Geist</div>
-        <div class="view-sub">Level 1 · Beobachte deine Gedanken</div>
-      </div>
-    </div>
-
-    <div class="quest-card active">
-      <div class="quest-head">
-        <span class="quest-num">Quest 1 · Morgen & Abend</span>
-        <span class="quest-status-icon">💠</span>
-      </div>
-      <div class="quest-title">Beobachte deine Gedanken</div>
-      <div class="quest-desc">Suche dir einen stillen Ort. Starte den Timer und lausche, welche Gedanken auftauchen. Du musst sie nicht bewerten – beobachte sie wie Wolken, die vorüberziehen.</div>
-      <div class="quest-tip">Tipp: Wähle einen Ort, an dem du für die gesamte Dauer ungestört bleibst.</div>
-    </div>
-
-    <div class="timer-display">
-      <div class="timer-ring">
-        <div class="timer-label" id="timer-label">Magische Mission</div>
-        <div class="timer-value" id="timer-value">04:00</div>
-        <div class="timer-day" id="timer-day">Tag 1 · Morgen</div>
-      </div>
-    </div>
-
-    <button class="btn" id="timer-start-btn" onclick="startTimer()">Mission starten</button>
-    <button class="btn secondary" onclick="resetTimer()">Zurücksetzen</button>
-  </div>
-
-  <!-- ============ VIEW: SEELE ============ -->
-  <div class="view" id="view-seele">
-    <div class="view-header">
-      <button class="back-btn" onclick="goHome()">‹</button>
-      <div>
-        <div class="view-title">Seele</div>
-        <div class="view-sub">Level 1 · Die Schatten erkennen</div>
-      </div>
-    </div>
-
-    <div class="magic-card">
-      <div class="magic-card-inner">
-        <div class="card-type">✦ Karte des Tages · Tag 1 · Frage ✦</div>
-        <div class="card-ornament">✧</div>
-        <div class="card-content" id="card-content">
-          Erinnere dich an einen Moment heute, in dem du anders gehandelt hast, als du es eigentlich für gut hältst. Was hast du getan? Was war der Auslöser?
-        </div>
-        <div class="card-ornament">✧</div>
-      </div>
-    </div>
-
-    <button class="btn" id="card-done-btn" onclick="completeCard()">Karte als gelesen markieren</button>
-  </div>
-
-</div>
-
-<!-- ============ BOTTOM NAV ============ -->
-<div class="bottom-nav">
-  <button class="nav-item active" onclick="goHome()" id="nav-home">
-    <span class="icon">🏠</span>
-    <span>Start</span>
-  </button>
-  <button class="nav-item" onclick="openTheme('koerper')" id="nav-koerper">
-    <span class="icon">🔥</span>
-    <span>Körper</span>
-  </button>
-  <button class="nav-item" onclick="openTheme('geist')" id="nav-geist">
-    <span class="icon">💠</span>
-    <span>Geist</span>
-  </button>
-  <button class="nav-item" onclick="openTheme('seele')" id="nav-seele">
-    <span class="icon">🌙</span>
-    <span>Seele</span>
-  </button>
-</div>
-
-<!-- ============ MODAL ============ -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-icon" id="modal-icon">✦</div>
-    <div class="modal-title" id="modal-title">Titel</div>
-    <div class="modal-text" id="modal-text">Text</div>
-    <button class="btn" onclick="closeModal()">Weiter</button>
-  </div>
-</div>
-
-<script>
-/* ================== STATE ================== */
-const STATE_KEY = 'magier_app_state_v1';
-
-const defaultState = {
-  name: null,
-  level: 1,
-  xp: 0,
-  startDate: null,
-  koerper: {
-    quest1Accepted: false,
-    quest1Days: 0,      // abgeschlossene Tage
-    quest1DoneToday: false,
-  },
-  geist: {
-    quest1Accepted: false,
-    timerSeconds: 240,  // 4 Minuten Start
-    timerRunning: false,
-    quest1Days: 0,
-  },
-  seele: {
-    quest1Accepted: false,
-    cardRead: false,
-  }
-};
-
-let state = loadState();
-
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STATE_KEY);
-    if (!raw) return { ...defaultState };
-    return { ...defaultState, ...JSON.parse(raw) };
-  } catch { return { ...defaultState }; }
-}
-function saveState() {
-  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch {}
-}
-
-/* ================== INTRO ================== */
-function createMage() {
-  const input = document.getElementById('intro-name');
-  const name = (input.value || '').trim() || 'Magier';
-  state.name = name;
-  state.startDate = new Date().toISOString();
-  saveState();
-  renderHome();
-  showView('view-home');
-}
-
-/* ================== NAVIGATION ================== */
-function showView(id) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-  document.getElementById('app').scrollTop = 0;
-  updateNav(id);
-}
-function updateNav(id) {
-  const map = {
-    'view-home': 'nav-home',
-    'view-koerper': 'nav-koerper',
-    'view-geist': 'nav-geist',
-    'view-seele': 'nav-seele',
-  };
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const active = map[id];
-  if (active) document.getElementById(active).classList.add('active');
-}
-function goHome() { renderHome(); showView('view-home'); }
-
-function openTheme(theme) {
-  if (theme === 'koerper') { renderKoerper(); showView('view-koerper'); }
-  if (theme === 'geist')   { renderGeist();   showView('view-geist'); }
-  if (theme === 'seele')   { renderSeele();   showView('view-seele'); }
-}
-
-/* ================== HOME RENDER ================== */
-function renderHome() {
-  document.getElementById('home-name').textContent = state.name || 'Magier';
-  document.getElementById('home-level').textContent = state.level;
-  document.getElementById('home-xp').textContent = state.xp + ' XP';
-  document.getElementById('home-avatar').textContent = '🧙';
-
-  // Tagesanzeige
-  const day = state.startDate
-    ? Math.max(1, Math.floor((Date.now() - new Date(state.startDate)) / 86400000) + 1)
-    : 1;
-  document.getElementById('home-day').textContent = day;
-
-  // Punkte für jedes Thema
-  renderDots('koerper', state.koerper.quest1Days, 7);
-  renderDots('geist', state.geist.quest1Days, 7);
-  renderDots('seele', state.seele.cardRead ? 1 : 0, 7);
-}
-
-function renderDots(theme, done, total) {
-  const container = document.getElementById('dots-' + theme);
-  if (!container) return;
-  container.innerHTML = '';
-  for (let i = 0; i < total; i++) {
-    const d = document.createElement('div');
-    d.className = 'dot';
-    if (i < done) d.classList.add('done');
-    else if (i === done && done < total) d.classList.add('today');
-    container.appendChild(d);
-  }
-}
-
-/* ================== KÖRPER ================== */
-function renderKoerper() {
-  const q1 = state.koerper;
-  const btn = document.getElementById('kq1-btn');
-  const card = document.getElementById('kq1');
-  const head = card.querySelector('.quest-status-icon');
-
-  if (q1.quest1DoneToday) {
-    head.textContent = '✅';
-    btn.textContent = 'Heute abgeschlossen';
-    btn.disabled = true;
-    btn.style.opacity = '0.6';
-  } else if (q1.quest1Accepted) {
-    head.textContent = '⏳';
-    btn.textContent = 'Heute als erledigt markieren';
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    btn.onclick = () => completeKoerperDay();
-  } else {
-    head.textContent = '🔥';
-    btn.textContent = 'Quest annehmen';
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    btn.onclick = () => acceptQuest('koerper');
-  }
-}
-
-function acceptQuest(theme) {
-  if (theme === 'koerper') {
-    state.koerper.quest1Accepted = true;
-    saveState();
-    showModal('🔥', 'Quest angenommen', 'Deine Reise im Pfad des Körpers beginnt. Kehre täglich zurück, um deinen Fortschritt zu markieren.');
-    renderKoerper();
-  }
-}
-
-function completeKoerperDay() {
-  if (state.koerper.quest1DoneToday) return;
-  state.koerper.quest1DoneToday = true;
-  state.koerper.quest1Days = Math.min(7, state.koerper.quest1Days + 1);
-  state.xp += 10;
-  saveState();
-  showModal('✨', 'Tag gemeistert!', 'Du hast deine heutige Aufgabe abgeschlossen. +10 XP. Dein Körper dankt dir.');
-  renderKoerper();
-}
-
-/* ================== GEIST (TIMER) ================== */
-let timerInterval = null;
-let timerRemaining = 240;
-let timerPaused = false;
-
-function renderGeist() {
-  timerRemaining = state.geist.timerSeconds;
-  updateTimerDisplay();
-  if (!state.geist.timerRunning) {
-    document.getElementById('timer-start-btn').textContent = 'Mission starten';
-  }
-}
-
-function updateTimerDisplay() {
-  const m = Math.floor(timerRemaining / 60).toString().padStart(2, '0');
-  const s = (timerRemaining % 60).toString().padStart(2, '0');
-  document.getElementById('timer-value').textContent = `${m}:${s}`;
-  const day = Math.min(7, state.geist.quest1Days + 1);
-  document.getElementById('timer-day').textContent = `Tag ${day} · Morgen`;
-}
-
-function startTimer() {
-  if (timerInterval) return;
-  if (!state.geist.quest1Accepted) {
-    state.geist.quest1Accepted = true;
-    saveState();
-  }
-  state.geist.timerRunning = true;
-  timerPaused = false;
-  document.getElementById('timer-start-btn').textContent = 'Läuft …';
-  timerInterval = setInterval(() => {
-    if (timerRemaining > 0) {
-      timerRemaining--;
-      updateTimerDisplay();
-    } else {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      state.geist.timerRunning = false;
-      state.geist.quest1Days = Math.min(7, state.geist.quest1Days + 1);
-      // nächster Tag: +1 Minute (max 10)
-      state.geist.timerSeconds = Math.min(600, state.geist.timerSeconds + 60);
-      state.xp += 15;
-      saveState();
-      showModal('💠', 'Geist gestärkt!', 'Deine heutige Mission ist abgeschlossen. +15 XP. Der Timer wächst mit dir.');
-      document.getElementById('timer-start-btn').textContent = 'Mission starten';
-      renderGeist();
-    }
-  }, 1000);
-}
-
-function resetTimer() {
-  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-  state.geist.timerRunning = false;
-  timerRemaining = 240;
-  state.geist.timerSeconds = 240;
-  saveState();
-  updateTimerDisplay();
-  document.getElementById('timer-start-btn').textContent = 'Mission starten';
-}
-
-/* ================== SEELE (KARTE) ================== */
-function renderSeele() {
-  const btn = document.getElementById('card-done-btn');
-  const card = document.querySelector('#view-seele .magic-card-inner');
-  if (state.seele.cardRead) {
-    btn.textContent = 'Karte bereits gelesen';
-    btn.disabled = true;
-    btn.style.opacity = '0.6';
-    if (card) card.style.boxShadow = '0 0 35px rgba(74,222,128,0.5), inset 0 0 30px rgba(74,222,128,0.1)';
-  } else {
-    btn.textContent = 'Karte als gelesen markieren';
-    btn.disabled = false;
-    btn.style.opacity = '1';
-  }
-}
-
-function completeCard() {
-  if (state.seele.cardRead) return;
-  state.seele.cardRead = true;
-  state.xp += 5;
-  saveState();
-  showModal('🌙', 'Karte gelesen', 'Deine Seele hat eine neue Erkenntnis aufgenommen. +5 XP.');
-  renderSeele();
-}
-
-/* ================== MODAL ================== */
-function showModal(icon, title, text) {
-  document.getElementById('modal-icon').textContent = icon;
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-text').textContent = text;
-  document.getElementById('modal').classList.add('show');
-}
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
-}
-
-/* ================== INIT ================== */
-window.addEventListener('load', () => {
-  if (state.name) {
-    renderHome();
-    showView('view-home');
-  } else {
-    showView('view-intro');
-  }
-});
-</script>
-</body>
-</html>
+    filter: drop-shadow(0 0 30
