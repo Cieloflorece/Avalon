@@ -1,0 +1,2031 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f5f2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Avalon">
+  <meta name="description" content="Avalon – Weg des Magiers. Dein Weg durch Körper, Geist und Seele.">
+  <title>Avalon – Weg des Magiers</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <style>
+/* =====================================================================
+   AVALON – DESIGN
+   Körper = Grün · Geist = Gelb · Seele = Violett
+   App-Shell: fester Viewport, Screens scrollen nur in sich selbst.
+   ===================================================================== */
+
+:root {
+  --body: #1f9d55;  --body-soft: #e8f6ee;  --body-ink: #127040;  --body-on: #ffffff;
+  --mind: #f2b705;  --mind-soft: #fff5d6;  --mind-ink: #7d5c00;  --mind-on: #1c1c1e;
+  --soul: #8b5cf6;  --soul-soft: #f1ebff;  --soul-ink: #5b2fc4;  --soul-on: #ffffff;
+
+  --frame: #e9e9e4;
+  --bg: #f5f5f2;
+  --surface: #ffffff;
+  --surface-2: #f3f3f0;
+  --text: #19191b;
+  --muted: #7b7b80;
+  --line: #e4e4df;
+  --accent: #19191b;
+  --accent-ink: #ffffff;
+  --danger: #d23b3b;
+
+  --ring: conic-gradient(from 200deg, var(--body), var(--mind), var(--soul), var(--body));
+  --shadow-sm: 0 1px 2px rgba(20,20,30,.05), 0 2px 8px rgba(20,20,30,.04);
+  --shadow: 0 1px 2px rgba(20,20,30,.05), 0 12px 32px rgba(20,20,30,.08);
+  --shadow-lg: 0 24px 60px rgba(20,20,30,.18);
+
+  --r-lg: 26px;
+  --r: 18px;
+  --r-sm: 12px;
+  --tb-h: 64px;
+  --maxw: 480px;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --body-soft: #13301f; --body-ink: #78dea3;
+  --mind-soft: #332a0b; --mind-ink: #ffd54a;
+  --soul-soft: #261b42; --soul-ink: #c7adff;
+  --frame: #050506; --bg: #111113; --surface: #1b1b1e; --surface-2: #26262a;
+  --text: #f2f2f3; --muted: #9b9ba1; --line: #303035;
+  --accent: #f2f2f3; --accent-ink: #111113;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+  --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.4);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --body-soft: #13301f; --body-ink: #78dea3;
+    --mind-soft: #332a0b; --mind-ink: #ffd54a;
+    --soul-soft: #261b42; --soul-ink: #c7adff;
+    --frame: #050506; --bg: #111113; --surface: #1b1b1e; --surface-2: #26262a;
+    --text: #f2f2f3; --muted: #9b9ba1; --line: #303035;
+    --accent: #f2f2f3; --accent-ink: #111113;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.4);
+    color-scheme: dark;
+  }
+}
+
+.cat-body { --c: var(--body); --c-soft: var(--body-soft); --c-ink: var(--body-ink); --c-on: var(--body-on); }
+.cat-mind { --c: var(--mind); --c-soft: var(--mind-soft); --c-ink: var(--mind-ink); --c-on: var(--mind-on); }
+.cat-soul { --c: var(--soul); --c-soft: var(--soul-soft); --c-ink: var(--soul-ink); --c-on: var(--soul-on); }
+
+/* ---------- Basis & App-Rahmen ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; overflow: hidden; }
+body {
+  position: fixed; inset: 0;
+  background: var(--frame);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+[hidden] { display: none !important; }
+button { font: inherit; color: inherit; cursor: pointer; -webkit-user-select: none; user-select: none; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { line-height: 1.2; letter-spacing: -.01em; }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--soul); outline-offset: 2px; }
+
+.app {
+  position: relative;
+  width: 100%; height: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  background: var(--bg);
+  overflow: hidden;
+}
+@media (min-width: 560px) and (min-height: 640px) {
+  body { display: grid; place-items: center; }
+  .app {
+    height: min(92vh, 880px);
+    max-width: 420px;
+    border-radius: 36px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
+    transform: translateZ(0); /* Overlays bleiben im Rahmen */
+  }
+}
+
+/* ---------- Bühne & Screens ---------- */
+.stage { position: absolute; inset: 0; }
+.screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  overflow-x: hidden; overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: calc(18px + var(--sat)) 18px calc(24px + var(--sab));
+  background: var(--bg);
+}
+.screen.with-tb { padding-top: calc(var(--tb-h) + var(--sat) + 14px); }
+
+.enter-fwd  { animation: inFwd .42s var(--ease) both; box-shadow: -16px 0 40px rgba(0,0,0,.08); z-index: 2; }
+.leave-fwd  { animation: outFwd .42s var(--ease) both; z-index: 1; }
+.enter-back { animation: inBack .42s var(--ease) both; z-index: 1; }
+.leave-back { animation: outBack .42s var(--ease) both; z-index: 2; box-shadow: -16px 0 40px rgba(0,0,0,.08); }
+.enter-fade { animation: inFade .38s var(--ease) both; z-index: 2; }
+.leave-fade { animation: outFade .22s ease both; z-index: 1; }
+@keyframes inFwd   { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes outFwd  { to { transform: translateX(-26%); opacity: .5; } }
+@keyframes inBack  { from { transform: translateX(-26%); opacity: .5; } to { transform: none; opacity: 1; } }
+@keyframes outBack { to { transform: translateX(100%); } }
+@keyframes inFade  { from { opacity: 0; transform: scale(.985) translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes outFade { to { opacity: 0; } }
+
+/* ---------- Typo-Helfer ---------- */
+.eyebrow {
+  font-size: .7rem; font-weight: 750; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted);
+}
+.muted { color: var(--muted); }
+.small { font-size: .86rem; }
+.center { text-align: center; }
+.chev { color: var(--muted); font-size: 1.35rem; line-height: 1; flex: none; }
+.grow { flex: 1; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 46px; padding: 10px 20px;
+  border: 1.5px solid var(--line); border-radius: 999px;
+  background: var(--surface); font-weight: 680; font-size: .95rem;
+  transition: transform .14s ease, opacity .2s, background .2s, box-shadow .2s;
+}
+.btn:active { transform: scale(.96); }
+.btn:disabled { opacity: .35; pointer-events: none; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: var(--shadow-sm); }
+.btn.block { width: 100%; }
+.btn.lg { min-height: 58px; font-size: 1.05rem; border-radius: 20px; }
+.btn.cat-btn { background: var(--c); color: var(--c-on); border-color: transparent; }
+.btn.soft { background: var(--c-soft); color: var(--c-ink); border-color: transparent; }
+.btn.ghost { background: transparent; }
+.btn.danger { color: var(--danger); background: transparent; border-color: color-mix(in srgb, var(--danger) 30%, transparent); }
+.btn.sm { min-height: 38px; padding: 6px 14px; font-size: .86rem; }
+
+.icon-btn {
+  width: 42px; height: 42px; flex: none;
+  display: grid; place-items: center;
+  border-radius: 14px; border: 1.5px solid var(--line);
+  background: var(--surface); font-size: 1.1rem; line-height: 1;
+  transition: transform .14s;
+}
+.icon-btn:active { transform: scale(.92); }
+.icon-btn.round { border-radius: 50%; }
+.burger { display: grid; gap: 4px; width: 18px; }
+.burger i { display: block; height: 2px; border-radius: 2px; background: currentColor; }
+.burger i:nth-child(2) { width: 70%; justify-self: end; }
+
+/* ---------- Avatar ---------- */
+.avatar {
+  flex: none; display: grid; place-items: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  font-size: 1.3rem; line-height: 1;
+  border: 2.5px solid transparent;
+  background: linear-gradient(var(--surface-2), var(--surface-2)) padding-box, var(--ring) border-box;
+}
+.avatar.xl { width: 96px; height: 96px; font-size: 3rem; border-width: 4px; }
+.avatar.lg { width: 72px; height: 72px; font-size: 2.3rem; border-width: 3.5px; }
+
+/* ---------- Top-Leiste ---------- */
+.topbar {
+  position: absolute; z-index: 20; top: 0; left: 0; right: 0;
+  height: calc(var(--tb-h) + var(--sat));
+  padding: var(--sat) 14px 0 12px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(16px); backdrop-filter: saturate(1.4) blur(16px);
+  border-bottom: 1px solid var(--line);
+  transform: translateY(-110%); opacity: 0; pointer-events: none;
+  transition: transform .5s var(--ease), opacity .35s;
+}
+.app.chrome .topbar { transform: none; opacity: 1; pointer-events: auto; }
+.tb-profile {
+  display: flex; align-items: center; gap: 10px; min-width: 0;
+  padding: 4px 8px 4px 2px; border: 0; background: none; border-radius: 999px; text-align: left;
+}
+.tb-profile:active { background: var(--surface-2); }
+.tb-text { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.tb-text strong { font-size: .98rem; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tb-lvl { display: flex; align-items: center; gap: 8px; font-size: .72rem; font-weight: 700; color: var(--muted); }
+.mini-bar { width: 56px; height: 5px; border-radius: 9px; background: var(--line); overflow: hidden; }
+.mini-bar span, .xpbar span {
+  display: block; height: 100%; border-radius: 9px;
+  background: linear-gradient(90deg, var(--body), var(--mind), var(--soul));
+  transition: width .7s var(--ease);
+}
+
+/* ---------- Screen-Kopf (Zurück + Titel) ---------- */
+.s-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.s-head h1 { font-size: 1.45rem; }
+.s-head .titles { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+
+/* ---------- Karten ---------- */
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 16px; box-shadow: var(--shadow-sm);
+}
+.card + .card { margin-top: 12px; }
+.empty {
+  text-align: center; color: var(--muted); padding: 32px 18px;
+  border: 1.5px dashed var(--line); border-radius: var(--r);
+}
+.empty .big { display: block; font-size: 2.2rem; margin-bottom: 6px; }
+
+/* ---------- Onboarding ---------- */
+.screen-lang { gap: 22px; }
+.screen-lang > :first-child, .screen-home > :first-child { margin-top: auto; }
+.screen-lang > :last-child, .screen-home > :last-child { margin-bottom: auto; }
+.brand { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.brand-mark {
+  width: 84px; height: 84px; border-radius: 26px;
+  display: grid; place-items: center; font-size: 2.6rem;
+  border: 3px solid transparent;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--ring) border-box;
+  box-shadow: var(--shadow);
+}
+.brand h1 { font-size: 2rem; }
+.choice-list { display: flex; flex-direction: column; gap: 10px; }
+.choice {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  min-height: 64px; padding: 14px 18px;
+  background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--r);
+  font-weight: 650; text-align: left; box-shadow: var(--shadow-sm);
+  transition: transform .14s, border-color .2s;
+}
+.choice:active { transform: scale(.98); }
+.choice .grow { font-size: 1.02rem; }
+.choice.is-selected { border-color: var(--text); box-shadow: inset 0 0 0 1px var(--text); }
+.flag { font-size: 1.7rem; line-height: 1; }
+.steps { display: flex; justify-content: center; gap: 6px; }
+.steps span { width: 28px; height: 5px; border-radius: 9px; background: var(--line); }
+.steps span.on { background: var(--c); }
+
+.screen-setup { gap: 18px; }
+.setup-hero { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding: 4px 0 2px; }
+.setup-hero .avatar.xl { transition: transform .3s var(--ease); }
+.setup-hero .avatar.xl.pop { animation: pop .4s var(--ease); }
+@keyframes pop { 40% { transform: scale(1.12); } }
+.setup-hero h1 { font-size: 1.5rem; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field > .label { font-size: .8rem; font-weight: 750; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+input[type="text"], textarea {
+  width: 100%; padding: 15px 16px;
+  border: 1.5px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--text);
+  font: inherit; font-size: 16px; resize: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+input[type="text"]:focus, textarea:focus { border-color: var(--text); box-shadow: 0 0 0 4px var(--surface-2); }
+.avatar-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.avatar-opt {
+  aspect-ratio: 1; font-size: 1.6rem; line-height: 1;
+  border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface);
+  transition: transform .14s, border-color .2s, background .2s;
+}
+.avatar-opt:active { transform: scale(.9); }
+.avatar-opt.is-selected { border-color: var(--text); background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--text); }
+.sticky-foot {
+  position: sticky; bottom: 0;
+  margin: auto -18px calc(-24px - var(--sab));
+  padding: 14px 18px calc(18px + var(--sab));
+  background: linear-gradient(to top, var(--bg) 70%, transparent);
+}
+
+/* ---------- Visitenkarte (Hauptseite) ---------- */
+.screen-home { gap: 16px; }
+.id-card {
+  position: relative;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 30px; padding: 22px 20px 20px; box-shadow: var(--shadow);
+  transform-origin: 50% 0;
+  transition: transform .45s var(--ease), opacity .4s, border-radius .45s;
+}
+.id-card::before {
+  content: ""; position: absolute; left: 22px; right: 22px; top: 0; height: 4px;
+  border-radius: 0 0 6px 6px;
+  background: linear-gradient(90deg, var(--body), var(--mind), var(--soul));
+}
+.id-card.collapsing { transform: translateY(-38%) scale(.92, .22); opacity: 0; }
+.home-cta { transition: transform .4s var(--ease), opacity .3s; }
+.home-cta.collapsing { transform: translateY(30px); opacity: 0; }
+.id-top { display: flex; align-items: center; justify-content: space-between; }
+.id-main { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; margin: 10px 0 18px; }
+.id-main .avatar { margin-bottom: 6px; }
+.id-name { font-size: 1.55rem; overflow-wrap: anywhere; }
+.lvl-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 12px; border-radius: 99px;
+  background: var(--surface-2); font-size: .82rem; font-weight: 750;
+}
+.lvl-chip b { color: var(--muted); font-weight: 650; }
+.xpbar { width: 70%; height: 8px; border-radius: 9px; background: var(--surface-2); overflow: hidden; margin-top: 8px; }
+.xp-note { font-size: .74rem; color: var(--muted); font-weight: 600; }
+.cur-list { display: flex; flex-direction: column; gap: 8px; }
+.cur {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 11px 12px; border: 0; text-align: left;
+  background: var(--c-soft); border-radius: 16px;
+  transition: transform .14s;
+}
+.cur:active { transform: scale(.98); }
+.cur-dot {
+  width: 38px; height: 38px; border-radius: 12px; flex: none;
+  display: grid; place-items: center; font-size: 1.15rem;
+  background: var(--c);
+}
+.cur-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.cur-text small { color: var(--c-ink); font-weight: 800; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
+.cur-text strong { font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cur-text strong.none { color: var(--muted); font-weight: 550; }
+.cta-book { gap: 10px; }
+.cta-book .ico { font-size: 1.3rem; }
+
+/* ---------- Buch: Welten-Karussell ---------- */
+.screen-book { padding-left: 0; padding-right: 0; padding-bottom: calc(10px + var(--sab)); overflow: hidden; }
+.tabs {
+  display: flex; gap: 4px; padding: 4px; margin: 0 18px;
+  background: var(--surface-2); border-radius: 16px; flex: none;
+}
+.tab {
+  flex: 1; min-width: 0; border: 0; background: none;
+  padding: 8px 4px; border-radius: 12px;
+  font-size: .78rem; font-weight: 700; color: var(--muted);
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: background .25s, color .25s, box-shadow .25s;
+}
+.tab.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+.carousel {
+  flex: 1; min-height: 0;
+  display: flex; gap: 12px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  padding: 14px 7%;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.carousel::-webkit-scrollbar { display: none; }
+.wcard {
+  flex: 0 0 86%; min-width: 0;
+  scroll-snap-align: center; scroll-snap-stop: always;
+  display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 28px; box-shadow: var(--shadow);
+  overflow: hidden;
+  transform: scale(.94); opacity: .55;
+  transition: transform .35s var(--ease), opacity .35s;
+}
+.wcard.is-active { transform: none; opacity: 1; }
+.wcard-head { padding: 18px 18px 14px; text-align: center; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.w-icon {
+  width: 52px; height: 52px; border-radius: 16px;
+  display: grid; place-items: center; font-size: 1.6rem;
+  border: 2.5px solid transparent;
+  background: linear-gradient(var(--surface-2), var(--surface-2)) padding-box, var(--ring) border-box;
+}
+.wcard.is-locked .w-icon { background: var(--surface-2); border-color: var(--line); filter: grayscale(1); }
+.w-title { font-size: 1.15rem; }
+.w-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 99px; background: var(--surface-2);
+  font-size: .74rem; font-weight: 700; color: var(--muted);
+}
+.path-wrap { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.path-wrap::-webkit-scrollbar { display: none; }
+.path { position: relative; margin: 6px 0; }
+.path svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.path path { fill: none; stroke: var(--line); stroke-width: 3; stroke-dasharray: 2 9; stroke-linecap: round; }
+.node {
+  position: absolute; transform: translate(-50%, -32px);
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+}
+.lvl {
+  position: relative; width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 1.4rem; font-weight: 800;
+  background: var(--surface-2); color: var(--muted);
+  border: 2px solid var(--line);
+  transition: transform .15s;
+}
+.lvl:active { transform: scale(.9); }
+.lvl .lock { font-size: 1.15rem; filter: grayscale(1); opacity: .65; }
+.lvl.open {
+  color: var(--text); border: 4px solid transparent;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--ring) border-box;
+  box-shadow: var(--shadow);
+}
+.lvl.open::before {
+  content: ""; position: absolute; inset: -9px; border-radius: 50%;
+  border: 2px solid var(--soul); opacity: 0;
+  animation: ripple 2.4s ease-out infinite;
+}
+@keyframes ripple { 0% { transform: scale(.85); opacity: .5; } 100% { transform: scale(1.25); opacity: 0; } }
+.lvl.done { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.lvl.done::before { display: none; }
+.node-cap { font-size: .7rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.node-cap.go { color: var(--text); }
+.book-foot { flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 2px 18px 0; }
+.dots { display: flex; gap: 7px; }
+.dots i { width: 7px; height: 7px; border-radius: 9px; background: var(--line); transition: width .3s var(--ease), background .3s; }
+.dots i.on { width: 22px; background: var(--text); }
+.hint { font-size: .74rem; color: var(--muted); font-weight: 600; }
+
+/* ---------- Stufe: drei Bereiche ---------- */
+.lvl-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.lvl-badge {
+  width: 64px; height: 64px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; font-size: 1.5rem; font-weight: 850;
+  border: 4px solid transparent;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--ring) border-box;
+}
+.lvl-hero h1 { font-size: 1.6rem; }
+.cat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.cat-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 188px; padding: 16px 8px 14px;
+  background: var(--c-soft); border: 0; border-radius: 22px;
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--c) 45%, transparent);
+  transition: transform .15s;
+}
+.cat-card:active { transform: scale(.95); }
+.cat-ico {
+  width: 54px; height: 54px; border-radius: 18px;
+  display: grid; place-items: center; font-size: 1.6rem;
+  background: var(--c); box-shadow: 0 6px 16px color-mix(in srgb, var(--c) 35%, transparent);
+}
+.cat-card strong { color: var(--c-ink); font-size: 1rem; }
+.cat-prog { width: 80%; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.cat-prog small { color: var(--c-ink); font-weight: 750; font-size: .72rem; }
+.bar { width: 100%; height: 5px; border-radius: 9px; background: color-mix(in srgb, var(--c) 18%, transparent); overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--c); border-radius: 9px; transition: width .6s var(--ease); }
+.intro { margin-top: 16px; }
+.intro p { color: var(--muted); }
+
+/* ---------- Missionsliste ---------- */
+.screen-missions { padding-top: calc(var(--tb-h) + var(--sat)); padding-left: 0; padding-right: 0; }
+.m-hero {
+  padding: 16px 18px 18px;
+  background: var(--c-soft);
+  border-bottom: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
+}
+.m-hero .s-head { margin-bottom: 14px; }
+.m-hero .icon-btn { background: color-mix(in srgb, var(--surface) 70%, transparent); border-color: transparent; }
+.m-hero .eyebrow { color: var(--c-ink); opacity: .85; }
+.m-hero-row { display: flex; align-items: center; gap: 14px; }
+.m-hero-row .cat-ico { width: 58px; height: 58px; }
+.m-hero-row h1 { font-size: 1.6rem; }
+.m-hero .bar { margin-top: 14px; height: 6px; }
+.seg {
+  display: flex; gap: 6px; padding: 14px 18px 4px;
+}
+.seg button {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 38px; border-radius: 99px; font-size: .84rem; font-weight: 700;
+  border: 1.5px solid var(--line); background: var(--surface); color: var(--muted);
+}
+.seg button.on { background: var(--c); color: var(--c-on); border-color: transparent; }
+.m-list { list-style: none; margin: 0; padding: 12px 18px 0; display: flex; flex-direction: column; gap: 12px; }
+.m-card {
+  position: relative;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.m-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--c); }
+.m-card.st-done::before { background: var(--line); }
+.m-open {
+  display: flex; align-items: flex-start; gap: 12px; width: 100%;
+  padding: 15px 14px 0 20px; border: 0; background: none; text-align: left;
+}
+.m-open .titles { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.m-open strong { font-size: 1.04rem; }
+.m-open p { color: var(--muted); font-size: .86rem; line-height: 1.4; }
+.m-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px 14px 20px; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: .72rem; font-weight: 750; padding: 4px 9px; border-radius: 99px;
+  background: var(--surface-2); color: var(--muted);
+}
+.tag.st { background: var(--c-soft); color: var(--c-ink); }
+.done-txt { font-weight: 750; color: var(--muted); font-size: .88rem; }
+
+/* ---------- Overlays: gemeinsame Basis ---------- */
+.scrim {
+  position: absolute; inset: 0;
+  background: rgba(10,10,14,.42);
+  opacity: 0; transition: opacity .35s;
+}
+.layer { position: absolute; inset: 0; pointer-events: none; }
+.layer.open { pointer-events: auto; }
+.layer.open .scrim { opacity: 1; }
+
+/* Seitenleiste */
+.layer-menu { z-index: 40; }
+.sidebar {
+  position: absolute; top: 0; bottom: 0; right: 0;
+  width: min(330px, 86%);
+  display: flex; flex-direction: column;
+  background: var(--surface);
+  border-radius: 26px 0 0 26px;
+  box-shadow: var(--shadow-lg);
+  transform: translateX(104%);
+  transition: transform .42s var(--ease);
+}
+.layer-menu.open .sidebar { transform: none; }
+.sb-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: calc(18px + var(--sat)) 16px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.sb-who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sb-who strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-who small { color: var(--muted); font-weight: 650; font-size: .78rem; }
+.sb-nav { flex: 1; overflow-y: auto; padding: 8px 10px calc(20px + var(--sab)); overscroll-behavior: contain; }
+.sb-sec { margin: 18px 10px 6px; font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.mi {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  min-height: 46px; padding: 9px 10px;
+  border: 0; background: none; border-radius: 12px; text-align: left; font-weight: 580; font-size: .96rem;
+  transition: background .2s;
+}
+.mi:active, .mi:hover { background: var(--surface-2); }
+.mi.active { background: var(--surface-2); font-weight: 750; }
+.mi-ico {
+  width: 32px; height: 32px; border-radius: 10px; flex: none;
+  display: grid; place-items: center; font-size: 1rem; background: var(--surface-2);
+}
+.mi.active .mi-ico { background: var(--surface); box-shadow: var(--shadow-sm); }
+
+/* Bottom-Sheet */
+.layer-sheet { z-index: 45; }
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  max-height: 88%;
+  display: flex; flex-direction: column;
+  background: var(--surface);
+  border-radius: 28px 28px 0 0;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(105%);
+  transition: transform .45s var(--ease);
+}
+.layer-sheet.open .sheet { transform: none; }
+.sheet.dragging { transition: none; }
+.grab { flex: none; display: grid; place-items: center; padding: 10px 0 6px; touch-action: none; cursor: grab; }
+.grab span { width: 42px; height: 5px; border-radius: 9px; background: var(--line); }
+.sheet-body { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 20px 18px; overscroll-behavior: contain; }
+.sheet-foot { flex: none; padding: 12px 20px calc(16px + var(--sab)); border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.sh-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.sh-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 99px;
+  background: var(--c-soft); color: var(--c-ink); font-weight: 750; font-size: .8rem;
+}
+.sh-title { font-size: 1.45rem; margin-bottom: 8px; }
+.sh-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.prose p { margin: 0 0 12px; color: var(--text); opacity: .86; }
+.prose p:last-child { margin-bottom: 0; }
+.note { text-align: center; color: var(--muted); font-size: .82rem; font-weight: 600; }
+.done-banner {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 52px; border-radius: 16px;
+  background: var(--c-soft); color: var(--c-ink); font-weight: 750;
+}
+
+/* Modal / Begrüßung */
+.layer-modal { z-index: 50; display: grid; place-items: center; padding: 24px; }
+.modal {
+  position: relative; width: 100%; max-width: 360px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 26px 22px 22px;
+  background: var(--surface); border-radius: 30px; box-shadow: var(--shadow-lg);
+  text-align: center;
+  opacity: 0; transform: translateY(24px) scale(.94);
+  transition: transform .45s var(--ease), opacity .3s;
+}
+.layer-modal.open .modal { opacity: 1; transform: none; }
+.modal .guide {
+  width: 88px; height: 88px; margin-top: -70px;
+  border-radius: 50%; display: grid; place-items: center; font-size: 2.8rem;
+  border: 4px solid transparent;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--ring) border-box;
+  box-shadow: var(--shadow);
+}
+.layer-modal.open .guide { animation: bob 2.8s ease-in-out .5s infinite; }
+@keyframes bob { 50% { transform: translateY(-5px); } }
+.bubble {
+  position: relative; width: 100%;
+  padding: 14px 16px; border-radius: 18px; background: var(--surface-2);
+}
+.bubble::before {
+  content: ""; position: absolute; top: -7px; left: 50%;
+  width: 14px; height: 14px; background: var(--surface-2);
+  transform: translateX(-50%) rotate(45deg); border-radius: 3px;
+}
+.modal h2 { font-size: 1.3rem; }
+.bubble p { color: var(--muted); font-size: .95rem; position: relative; }
+.confetti { display: flex; gap: 6px; justify-content: center; }
+.confetti i { width: 8px; height: 8px; border-radius: 50%; }
+.confetti i:nth-child(1) { background: var(--body); }
+.confetti i:nth-child(2) { background: var(--mind); }
+.confetti i:nth-child(3) { background: var(--soul); }
+
+/* Toast */
+.toast {
+  position: absolute; z-index: 60; left: 50%; top: calc(var(--tb-h) + var(--sat) + 10px);
+  max-width: calc(100% - 40px);
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 18px; border-radius: 16px;
+  background: var(--text); color: var(--bg); font-weight: 650; font-size: .9rem;
+  box-shadow: var(--shadow-lg);
+  opacity: 0; pointer-events: none; transform: translate(-50%, -16px) scale(.96);
+  transition: opacity .25s, transform .35s var(--ease);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0) scale(1); }
+
+/* ---------- Menüseiten ---------- */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; }
+.stats div { display: flex; flex-direction: column; gap: 2px; }
+.stats div + div { border-left: 1px solid var(--line); }
+.stats strong { font-size: 1.3rem; }
+.stats small { color: var(--muted); font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.list { display: flex; flex-direction: column; gap: 8px; }
+.row {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 12px 14px; text-align: left;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.row .titles { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.row .titles small { color: var(--muted); font-size: .78rem; }
+.row .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
+.entry-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.entry-head small { color: var(--muted); font-weight: 650; }
+.link { background: none; border: 0; padding: 4px 0; font-weight: 700; font-size: .84rem; }
+.link.danger { color: var(--danger); }
+.row-switch { display: flex; align-items: center; justify-content: space-between; gap: 16px; cursor: pointer; }
+.row-switch > span { display: flex; flex-direction: column; gap: 2px; }
+.row-switch small { color: var(--muted); font-size: .84rem; }
+.switch {
+  appearance: none; -webkit-appearance: none; flex: none; margin: 0;
+  width: 52px; height: 31px; border-radius: 99px;
+  background: var(--line); position: relative; cursor: pointer; transition: background .25s;
+}
+.switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px;
+  width: 25px; height: 25px; border-radius: 50%; background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,.2); transition: transform .3s var(--ease);
+}
+.switch:checked { background: var(--body); }
+.switch:checked::after { transform: translateX(21px); }
+.legend { display: flex; gap: 8px; }
+.legend div {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 6px; border-radius: 14px; background: var(--c-soft); color: var(--c-ink); font-weight: 750; font-size: .84rem;
+}
+.legend i { width: 26px; height: 26px; border-radius: 50%; background: var(--c); }
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cal-head strong { text-transform: capitalize; }
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal .wd { font-size: .68rem; font-weight: 800; color: var(--muted); padding-bottom: 4px; }
+.cal .d {
+  position: relative; aspect-ratio: 1; border-radius: 11px;
+  display: grid; place-items: center; font-size: .86rem; font-weight: 600;
+  background: var(--surface-2);
+}
+.cal .d.today { background: var(--accent); color: var(--accent-ink); font-weight: 800; }
+.cal .d.act::after {
+  content: ""; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 5px; height: 5px; border-radius: 50%; background: var(--soul);
+}
+.cal-legend { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: .8rem; color: var(--muted); font-weight: 600; }
+.cal-legend i { width: 7px; height: 7px; border-radius: 50%; background: var(--soul); }
+.ph { text-align: center; padding: 30px 18px; }
+.ph .big { font-size: 2.6rem; margin-bottom: 8px; }
+.ph p + p { margin-top: 6px; }
+details.card summary { font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+details.card summary::-webkit-details-marker { display: none; }
+details.card summary::after { content: "+"; color: var(--muted); font-size: 1.2rem; line-height: 1; transition: transform .25s; }
+details.card[open] summary::after { transform: rotate(45deg); }
+details.card p { margin-top: 10px; color: var(--muted); }
+
+/* ---------- Weniger Bewegung ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+#setupForm { flex: 1; }
+
+/* Kleine / niedrige Displays */
+@media (max-height: 700px) {
+  .id-card { padding: 18px 16px 16px; }
+  .id-main { margin: 4px 0 12px; gap: 4px; }
+  .id-main .avatar.xl { width: 72px; height: 72px; font-size: 2.2rem; }
+  .cur { padding: 9px 10px; }
+  .cat-card { min-height: 160px; }
+  .setup-hero .avatar.xl { width: 76px; height: 76px; font-size: 2.4rem; }
+}
+.btn, .toast { white-space: nowrap; }
+.m-foot .tags { min-width: 0; }
+
+  </style>
+  <script>
+    /* Sicherheitsnetz: Fehler sichtbar machen statt leerem Bildschirm */
+    window.avalonShowError = function (msg) {
+      var box = document.getElementById('avalon-error');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = 'avalon-error';
+        box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;padding:14px 16px;border-radius:14px;background:#d23b3b;color:#fff;font:14px/1.4 system-ui,sans-serif';
+        (document.body || document.documentElement).appendChild(box);
+      }
+      box.textContent = '⚠️ Avalon: ' + msg;
+    };
+    window.addEventListener('error', function (e) { window.avalonShowError(e && e.message ? e.message : 'Unbekannter Fehler'); });
+  </script>
+</head>
+<body>
+  <div class="app" id="app">
+
+    <!-- Bühne: hier werden die Screens eingeblendet -->
+    <main class="stage" id="stage">
+      <!-- Startansicht direkt im HTML: nie ein leerer Bildschirm -->
+      <section class="screen screen-lang">
+        <div class="brand"><div class="brand-mark">📖</div><h1>Avalon</h1><p class="muted">Sprache · Language · Idioma</p></div>
+        <div class="choice-list">
+          <button class="choice" data-action="set-lang" data-lang="de"><span class="flag">🇩🇪</span><span class="grow">Deutsch</span><span class="chev">›</span></button>
+          <button class="choice" data-action="set-lang" data-lang="en"><span class="flag">🇬🇧</span><span class="grow">English</span><span class="chev">›</span></button>
+          <button class="choice" data-action="set-lang" data-lang="es"><span class="flag">🇪🇸</span><span class="grow">Español</span><span class="chev">›</span></button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Feste Top-Leiste -->
+    <header class="topbar" id="topbar">
+      <button class="tb-profile" data-action="go-home" aria-label="Spielerprofil">
+        <span class="avatar" id="tbAvatar"></span>
+        <span class="tb-text">
+          <strong id="tbName"></strong>
+          <span class="tb-lvl"><span id="tbLevel"></span><span class="mini-bar"><span id="tbBar"></span></span></span>
+        </span>
+      </button>
+      <button class="icon-btn" data-action="menu" aria-label="Menü"><span class="burger"><i></i><i></i><i></i></span></button>
+    </header>
+
+    <!-- Seitenleiste -->
+    <div class="layer layer-menu" id="layerMenu" aria-hidden="true">
+      <div class="scrim" data-action="close-overlay"></div>
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
+
+    <!-- Bottom-Sheet (Missionsdetails) -->
+    <div class="layer layer-sheet" id="layerSheet" aria-hidden="true">
+      <div class="scrim" data-action="close-overlay"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+    </div>
+
+    <!-- Modal (Begrüßung, Stufenaufstieg) -->
+    <div class="layer layer-modal" id="layerModal" aria-hidden="true">
+      <div class="scrim"></div>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="guide" id="modalGuide">🧙‍♂️</div>
+        <div class="confetti"><i></i><i></i><i></i></div>
+        <h2 id="modalTitle"></h2>
+        <div class="bubble"><p id="modalText"></p></div>
+        <button class="btn primary lg block" id="modalBtn" data-action="close-overlay"></button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <noscript><p style="position:fixed;bottom:0;left:0;right:0;padding:16px;text-align:center;background:#fff">Bitte aktiviere JavaScript, um Avalon zu nutzen.</p></noscript>
+
+  <script>
+/* =====================================================================
+   INHALTE – hier bearbeitest du deine Texte (Welten, Stufen, Missionen)
+   ===================================================================== */
+/* =====================================================================
+   AVALON – INHALTE
+   ---------------------------------------------------------------------
+   In dieser Datei pflegst du alle Texte für Welten, Stufen und Missionen.
+   Du musst dafür KEIN JavaScript verstehen – ersetze einfach die Texte
+   zwischen den Anführungszeichen.
+
+   Regeln:
+   - Jede Mission braucht eine eindeutige "id" (keine Leerzeichen).
+   - Absätze im Text trennst du mit einer Leerzeile: "\n\n"
+   - Fehlt eine Übersetzung (en/es), wird automatisch Deutsch angezeigt.
+   - "unlocked" legt fest, welche Stufen einer Welt geöffnet sind.
+   ===================================================================== */
+
+/* Platzhalter, die mehrfach verwendet werden – später einfach ersetzen. */
+const PH_SHORT = {
+  de: 'Kurze Beschreibung der Mission (Platzhalter).',
+  en: 'Short description of the mission (placeholder).',
+  es: 'Breve descripción de la misión (texto provisional).'
+};
+
+const PH_TEXT = {
+  de: 'Hier steht später dein eigener Text zu dieser Mission.\n\nBeschreibe, worum es geht, warum diese Übung wichtig ist und wie der Spieler sie Schritt für Schritt umsetzt.\n\nTipp: Absätze werden durch eine Leerzeile getrennt.',
+  en: 'Your own text for this mission will appear here later.\n\nDescribe what it is about, why this exercise matters and how the player completes it step by step.\n\nTip: separate paragraphs with an empty line.',
+  es: 'Aquí aparecerá más adelante tu propio texto para esta misión.\n\nDescribe de qué se trata, por qué es importante este ejercicio y cómo el jugador lo realiza paso a paso.\n\nConsejo: separa los párrafos con una línea vacía.'
+};
+
+window.AVALON_CONTENT = {
+
+  /* Welt, die beim Öffnen des Buches angezeigt wird */
+  startWorld: 'avalon',
+
+  /* Reihenfolge = Reihenfolge beim Wischen (links → rechts) */
+  worlds: [
+    {
+      id: 'brain',
+      icon: '🧠',
+      tab: { de: 'Gehirnsync', en: 'Brain Sync', es: 'Sinc. cerebral' },
+      title: { de: 'Gehirnsynchronisation', en: 'Brain Synchronisation', es: 'Sincronización cerebral' },
+      levels: 10,
+      unlocked: []          // noch alles gesperrt
+    },
+    {
+      id: 'avalon',
+      icon: '🪄',
+      tab: { de: 'Avalon', en: 'Avalon', es: 'Avalon' },
+      title: { de: 'Avalon, Weg des Magiers', en: 'Avalon, Path of the Magician', es: 'Avalon, el camino del mago' },
+      levels: 10,
+      unlocked: [1]         // nur Stufe 1 ist offen
+    },
+    {
+      id: 'anahoba',
+      icon: '🌺',
+      tab: { de: 'Anahoba', en: 'Anahoba', es: 'Anahoba' },
+      title: { de: 'Anahoba', en: 'Anahoba', es: 'Anahoba' },
+      levels: 10,
+      unlocked: []
+    }
+  ],
+
+  /* Einleitungstext pro Stufe (optional). Schlüssel: "<welt-id>-<stufe>" */
+  levelIntros: {
+    'avalon-1': {
+      de: 'Willkommen auf Stufe 1. Wähle einen Bereich und nimm deine ersten Missionen an.',
+      en: 'Welcome to level 1. Choose an area and accept your first missions.',
+      es: 'Bienvenido al nivel 1. Elige un área y acepta tus primeras misiones.'
+    }
+  },
+
+  /* Missionen pro Stufe. Schlüssel: "<welt-id>-<stufe>"
+     Kategorien: body = Körper (grün), mind = Geist (gelb), soul = Seele (violett) */
+  missions: {
+    'avalon-1': {
+      body: [
+        {
+          id: 'avalon-1-body-1', xp: 20,
+          title: { de: 'Morgenbewegung', en: 'Morning Movement', es: 'Movimiento matutino' },
+          short: PH_SHORT, text: PH_TEXT
+        },
+        {
+          id: 'avalon-1-body-2', xp: 20,
+          title: { de: 'Bewusst atmen', en: 'Conscious Breathing', es: 'Respiración consciente' },
+          short: PH_SHORT, text: PH_TEXT
+        },
+        {
+          id: 'avalon-1-body-3', xp: 30,
+          title: { de: 'Wasser des Lebens', en: 'Water of Life', es: 'Agua de vida' },
+          short: PH_SHORT, text: PH_TEXT
+        }
+      ],
+      mind: [
+        {
+          id: 'avalon-1-mind-1', xp: 20,
+          title: { de: 'Die stille Minute', en: 'The Silent Minute', es: 'El minuto de silencio' },
+          short: PH_SHORT, text: PH_TEXT
+        },
+        {
+          id: 'avalon-1-mind-2', xp: 20,
+          title: { de: 'Buch der Gedanken', en: 'Book of Thoughts', es: 'Libro de pensamientos' },
+          short: PH_SHORT, text: PH_TEXT
+        },
+        {
+          id: 'avalon-1-mind-3', xp: 30,
+          title: { de: 'Etwas Neues lernen', en: 'Learn Something New', es: 'Aprender algo nuevo' },
+          short: PH_SHORT, text: PH_TEXT
+        }
+      ],
+      soul: [
+        {
+          id: 'avalon-1-soul-1', xp: 20,
+          title: { de: 'Dankbarkeit', en: 'Gratitude', es: 'Gratitud' },
+          short: PH_SHORT, text: PH_TEXT
+        },
+        {
+          id: 'avalon-1-soul-2', xp: 20,
+          title: { de: 'Herzensbegegnung', en: 'Heart Encounter', es: 'Encuentro del corazón' },
+          short: PH_SHORT, text: PH_TEXT
+        },
+        {
+          id: 'avalon-1-soul-3', xp: 30,
+          title: { de: 'Dein Ort der Kraft', en: 'Your Place of Power', es: 'Tu lugar de poder' },
+          short: PH_SHORT, text: PH_TEXT
+        }
+      ]
+    }
+  }
+};
+
+  </script>
+  <script>
+/* =====================================================================
+   APP-LOGIK
+   ===================================================================== */
+/* Übersetzungen der Oberfläche */
+const I18N = {
+  de: {
+    step: 'Schritt {n} von 3', back: 'Zurück', continue: 'Weiter', ok: 'Weiter',
+    createProfile: 'Erstelle dein Profil', yourName: 'Dein Name', namePh: 'z. B. Merlin',
+    chooseAvatar: 'Wähle deinen Avatar', nameRequired: 'Bitte gib einen Namen ein und wähle einen Avatar.',
+    welcomeTitle: 'Willkommen, {name}!',
+    welcomeText: 'Ich bin dein Begleiter auf dieser Reise. Dein Weg führt dich durch Körper, Geist und Seele. Öffne das Buch, um deine erste Stufe zu beginnen.',
+    letsGo: 'Los geht’s',
+    playerCard: 'Spielerausweis', level: 'Stufe', toNext: 'Noch {n} XP bis zur nächsten Stufe',
+    currentMissions: 'Aktuelle Missionen', noActive: 'Noch keine Mission angenommen', openBook: 'Buch öffnen',
+    body: 'Körper', mind: 'Geist', soul: 'Seele',
+    menu: 'Menü', close: 'Schließen', prevWorld: 'Vorherige Welt', nextWorld: 'Nächste Welt',
+    swipeHint: 'Wische nach links oder rechts, um die Welt zu wechseln',
+    levelN: 'Stufe {n}', locked: 'Diese Stufe ist noch gesperrt.', lockedShort: 'gesperrt',
+    comingSoon: 'Diese Welt wird bald freigeschaltet.', chooseArea: 'Wähle einen Bereich',
+    noMissions: 'Hier gibt es noch keine Missionen.',
+    acceptMission: 'Mission annehmen', continueMission: 'Mission weiterführen', completeMission: 'Mission abschließen',
+    completed: 'Abgeschlossen', statusActive: 'Aktiv', statusDone: 'Erledigt',
+    acceptedToast: 'Mission angenommen!', completedToast: 'Mission abgeschlossen! +{xp} XP',
+    levelUpTitle: 'Stufe {n} erreicht!', levelUpText: 'Großartig! Deine Kraft wächst. Mach weiter auf deinem Weg.',
+    acceptedOn: 'Angenommen am {d}', doneOn: 'Abgeschlossen am {d}', notFound: 'Diese Seite wurde nicht gefunden.',
+    home: 'Startseite', character: 'Charakterprofil', logbook: 'Logbuch', diary: 'Tagebuch',
+    books: 'Bücher', settings: 'Einstellungen', notifications: 'Benachrichtigungen', design: 'Design',
+    language: 'Sprache', monthplan: 'Monatsplan', community: 'Community',
+    group: 'Lerngruppe', mentor: 'Mentor', help: 'Hilfe',
+    save: 'Speichern', saved: 'Gespeichert', reset: 'Fortschritt zurücksetzen',
+    resetConfirm: 'Wirklich den gesamten Fortschritt löschen? Das kann nicht rückgängig gemacht werden.',
+    logEmpty: 'Noch keine Einträge. Nimm im Buch deine erste Mission an.',
+    logSummary: '{a} aktiv · {d} abgeschlossen · {xp} XP gesammelt',
+    diaryPh: 'Was hast du heute erlebt?', addEntry: 'Eintrag speichern', diaryEmpty: 'Noch keine Tagebucheinträge.',
+    delete: 'Löschen', deleteConfirm: 'Diesen Eintrag löschen?',
+    notifReminders: 'Erinnerungen', notifText: 'Erinnerungen an deine Missionen (Grundgerüst – echte Push-Nachrichten folgen später).',
+    notifDenied: 'Benachrichtigungen sind im Browser blockiert.', notifUnsupported: 'Dieser Browser unterstützt hier keine Benachrichtigungen.',
+    notifTest: 'Test senden', notifTestBody: 'So sehen deine Erinnerungen aus.',
+    themeLight: 'Hell', themeDark: 'Dunkel', themeSystem: 'Automatisch (System)', colorLegend: 'Farben der Bereiche',
+    monthLegend: 'Tage mit Aktivität', monthPlaceholder: 'Hier planst du später deine Monatsziele und Rituale.',
+    placeholder: 'Dieser Bereich ist ein Platzhalter – Inhalte folgen.',
+    groupText: 'Finde Gleichgesinnte und geht den Weg gemeinsam.',
+    mentorText: 'Ein Mentor begleitet dich persönlich auf deiner Reise.',
+    helpText: 'Häufige Fragen',
+    faq1q: 'Wie nehme ich eine Mission an?', faq1a: 'Öffne das Buch, tippe auf Stufe 1, wähle einen Bereich und tippe auf „Mission annehmen“.',
+    faq2q: 'Wie bekomme ich XP?', faq2a: 'Schließe eine angenommene Mission in ihrer Detailansicht ab. Alle 100 XP steigst du eine Stufe auf.',
+    faq3q: 'Wo wird mein Fortschritt gespeichert?', faq3a: 'Lokal auf deinem Gerät im Browser. Wenn du die Browserdaten löschst, geht er verloren.',
+    wd: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+  },
+  en: {
+    step: 'Step {n} of 3', back: 'Back', continue: 'Continue', ok: 'Continue',
+    createProfile: 'Create your profile', yourName: 'Your name', namePh: 'e.g. Merlin',
+    chooseAvatar: 'Choose your avatar', nameRequired: 'Please enter a name and choose an avatar.',
+    welcomeTitle: 'Welcome, {name}!',
+    welcomeText: 'I am your companion on this journey. Your path leads through body, mind and soul. Open the book to begin your first level.',
+    letsGo: 'Let’s go',
+    playerCard: 'Player card', level: 'Level', toNext: '{n} XP to the next level',
+    currentMissions: 'Current missions', noActive: 'No mission accepted yet', openBook: 'Open book',
+    body: 'Body', mind: 'Mind', soul: 'Soul',
+    menu: 'Menu', close: 'Close', prevWorld: 'Previous world', nextWorld: 'Next world',
+    swipeHint: 'Swipe left or right to change worlds',
+    levelN: 'Level {n}', locked: 'This level is still locked.', lockedShort: 'locked',
+    comingSoon: 'This world will be unlocked soon.', chooseArea: 'Choose an area',
+    noMissions: 'There are no missions here yet.',
+    acceptMission: 'Accept mission', continueMission: 'Continue mission', completeMission: 'Complete mission',
+    completed: 'Completed', statusActive: 'Active', statusDone: 'Done',
+    acceptedToast: 'Mission accepted!', completedToast: 'Mission completed! +{xp} XP',
+    levelUpTitle: 'Level {n} reached!', levelUpText: 'Great! Your power is growing. Keep going on your path.',
+    acceptedOn: 'Accepted on {d}', doneOn: 'Completed on {d}', notFound: 'This page could not be found.',
+    home: 'Home', character: 'Character profile', logbook: 'Logbook', diary: 'Diary',
+    books: 'Books', settings: 'Settings', notifications: 'Notifications', design: 'Design',
+    language: 'Language', monthplan: 'Monthly plan', community: 'Community',
+    group: 'Study group', mentor: 'Mentor', help: 'Help',
+    save: 'Save', saved: 'Saved', reset: 'Reset progress',
+    resetConfirm: 'Really delete all progress? This cannot be undone.',
+    logEmpty: 'No entries yet. Accept your first mission in the book.',
+    logSummary: '{a} active · {d} completed · {xp} XP collected',
+    diaryPh: 'What did you experience today?', addEntry: 'Save entry', diaryEmpty: 'No diary entries yet.',
+    delete: 'Delete', deleteConfirm: 'Delete this entry?',
+    notifReminders: 'Reminders', notifText: 'Reminders for your missions (framework – real push messages will follow).',
+    notifDenied: 'Notifications are blocked in your browser.', notifUnsupported: 'This browser does not support notifications here.',
+    notifTest: 'Send test', notifTestBody: 'This is what your reminders look like.',
+    themeLight: 'Light', themeDark: 'Dark', themeSystem: 'Automatic (system)', colorLegend: 'Area colours',
+    monthLegend: 'Days with activity', monthPlaceholder: 'Later you will plan your monthly goals and rituals here.',
+    placeholder: 'This area is a placeholder – content will follow.',
+    groupText: 'Find like-minded people and walk the path together.',
+    mentorText: 'A mentor accompanies you personally on your journey.',
+    helpText: 'Frequently asked questions',
+    faq1q: 'How do I accept a mission?', faq1a: 'Open the book, tap level 1, choose an area and tap “Accept mission”.',
+    faq2q: 'How do I earn XP?', faq2a: 'Complete an accepted mission in its detail view. Every 100 XP you reach a new level.',
+    faq3q: 'Where is my progress stored?', faq3a: 'Locally in your browser on this device. Clearing browser data will remove it.',
+    wd: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+  },
+  es: {
+    step: 'Paso {n} de 3', back: 'Atrás', continue: 'Continuar', ok: 'Continuar',
+    createProfile: 'Crea tu perfil', yourName: 'Tu nombre', namePh: 'p. ej. Merlín',
+    chooseAvatar: 'Elige tu avatar', nameRequired: 'Introduce un nombre y elige un avatar.',
+    welcomeTitle: '¡Bienvenido, {name}!',
+    welcomeText: 'Soy tu compañero en este viaje. Tu camino recorre cuerpo, mente y alma. Abre el libro para comenzar tu primer nivel.',
+    letsGo: '¡Vamos!',
+    playerCard: 'Tarjeta de jugador', level: 'Nivel', toNext: 'Faltan {n} XP para el siguiente nivel',
+    currentMissions: 'Misiones actuales', noActive: 'Aún no has aceptado ninguna misión', openBook: 'Abrir libro',
+    body: 'Cuerpo', mind: 'Mente', soul: 'Alma',
+    menu: 'Menú', close: 'Cerrar', prevWorld: 'Mundo anterior', nextWorld: 'Mundo siguiente',
+    swipeHint: 'Desliza a la izquierda o a la derecha para cambiar de mundo',
+    levelN: 'Nivel {n}', locked: 'Este nivel todavía está bloqueado.', lockedShort: 'bloqueado',
+    comingSoon: 'Este mundo se desbloqueará pronto.', chooseArea: 'Elige un área',
+    noMissions: 'Aquí todavía no hay misiones.',
+    acceptMission: 'Aceptar misión', continueMission: 'Continuar misión', completeMission: 'Completar misión',
+    completed: 'Completada', statusActive: 'Activa', statusDone: 'Hecha',
+    acceptedToast: '¡Misión aceptada!', completedToast: '¡Misión completada! +{xp} XP',
+    levelUpTitle: '¡Nivel {n} alcanzado!', levelUpText: '¡Genial! Tu poder crece. Sigue tu camino.',
+    acceptedOn: 'Aceptada el {d}', doneOn: 'Completada el {d}', notFound: 'No se encontró esta página.',
+    home: 'Inicio', character: 'Perfil del personaje', logbook: 'Bitácora', diary: 'Diario',
+    books: 'Libros', settings: 'Ajustes', notifications: 'Notificaciones', design: 'Diseño',
+    language: 'Idioma', monthplan: 'Plan mensual', community: 'Comunidad',
+    group: 'Grupo de estudio', mentor: 'Mentor', help: 'Ayuda',
+    save: 'Guardar', saved: 'Guardado', reset: 'Restablecer progreso',
+    resetConfirm: '¿Seguro que quieres borrar todo el progreso? No se puede deshacer.',
+    logEmpty: 'Aún no hay entradas. Acepta tu primera misión en el libro.',
+    logSummary: '{a} activas · {d} completadas · {xp} XP acumulados',
+    diaryPh: '¿Qué has vivido hoy?', addEntry: 'Guardar entrada', diaryEmpty: 'Aún no hay entradas en el diario.',
+    delete: 'Eliminar', deleteConfirm: '¿Eliminar esta entrada?',
+    notifReminders: 'Recordatorios', notifText: 'Recordatorios de tus misiones (estructura base – las notificaciones reales llegarán después).',
+    notifDenied: 'Las notificaciones están bloqueadas en el navegador.', notifUnsupported: 'Este navegador no admite notificaciones aquí.',
+    notifTest: 'Enviar prueba', notifTestBody: 'Así se verán tus recordatorios.',
+    themeLight: 'Claro', themeDark: 'Oscuro', themeSystem: 'Automático (sistema)', colorLegend: 'Colores de las áreas',
+    monthLegend: 'Días con actividad', monthPlaceholder: 'Aquí planificarás más adelante tus metas y rituales del mes.',
+    placeholder: 'Esta área es provisional – el contenido llegará pronto.',
+    groupText: 'Encuentra personas afines y recorred el camino juntos.',
+    mentorText: 'Un mentor te acompaña personalmente en tu viaje.',
+    helpText: 'Preguntas frecuentes',
+    faq1q: '¿Cómo acepto una misión?', faq1a: 'Abre el libro, toca el nivel 1, elige un área y toca «Aceptar misión».',
+    faq2q: '¿Cómo consigo XP?', faq2a: 'Completa una misión aceptada en su vista de detalle. Cada 100 XP subes de nivel.',
+    faq3q: '¿Dónde se guarda mi progreso?', faq3a: 'Localmente en el navegador de este dispositivo. Si borras los datos del navegador, se perderá.',
+    wd: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do']
+  }
+};
+
+(function () {
+  'use strict';
+
+  const C = window.AVALON_CONTENT;
+  if (!C || !Array.isArray(C.worlds)) {
+    window.avalonShowError && window.avalonShowError('Inhalte (AVALON_CONTENT) fehlen.');
+    return;
+  }
+
+  /* ------------------------------------------------------------------
+     KONSTANTEN
+     ------------------------------------------------------------------ */
+  const STORE_KEY = 'avalon.save.v1';
+  const XP_PER_LEVEL = 100;
+  const AVATARS = ['🧙', '🧝', '🧚', '🦉', '🐉', '🦊', '🐺', '🦋', '🌙', '🔮', '🌿', '⭐'];
+  const CATS = ['body', 'mind', 'soul'];
+  const CAT_ICON = { body: '🌿', mind: '💡', soul: '🔮' };
+  const LANGS = [
+    { id: 'de', label: 'Deutsch', flag: '🇩🇪' },
+    { id: 'en', label: 'English', flag: '🇬🇧' },
+    { id: 'es', label: 'Español', flag: '🇪🇸' }
+  ];
+  const LOCALES = { de: 'de-DE', en: 'en-GB', es: 'es-ES' };
+
+  /* Zusätzliche Texte für die neue Oberfläche */
+  const EXTRA = {
+    de: { worldOf: 'Welt {i} von {n}', levelsOpen: '{o} von {n} Stufen offen', soon: 'Bald verfügbar', start: 'Start',
+          missionsDone: '{d} von {n} Missionen erledigt', statusOpen: 'Offen', reward: 'Belohnung', tapToOpen: 'Tippe auf eine Mission für Details' },
+    en: { worldOf: 'World {i} of {n}', levelsOpen: '{o} of {n} levels open', soon: 'Coming soon', start: 'Start',
+          missionsDone: '{d} of {n} missions done', statusOpen: 'Open', reward: 'Reward', tapToOpen: 'Tap a mission for details' },
+    es: { worldOf: 'Mundo {i} de {n}', levelsOpen: '{o} de {n} niveles abiertos', soon: 'Próximamente', start: 'Inicio',
+          missionsDone: '{d} de {n} misiones hechas', statusOpen: 'Abierta', reward: 'Recompensa', tapToOpen: 'Toca una misión para ver detalles' }
+  };
+  Object.keys(EXTRA).forEach(l => Object.assign(I18N[l], EXTRA[l]));
+
+  /* ------------------------------------------------------------------
+     SPIELSTAND
+     ------------------------------------------------------------------ */
+  function defaults() {
+    return {
+      lang: null, name: '', avatar: '', onboarded: false, xp: 0,
+      missions: {}, diary: [],
+      settings: { notifications: false, theme: 'system' }
+    };
+  }
+  function load() {
+    const d = defaults();
+    try {
+      const s = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if (!s || typeof s !== 'object') return d;
+      const m = Object.assign(d, s, {
+        missions: (s.missions && typeof s.missions === 'object') ? s.missions : {},
+        diary: Array.isArray(s.diary) ? s.diary : [],
+        settings: Object.assign(defaults().settings, s.settings || {}),
+        xp: Number(s.xp) || 0
+      });
+      if (m.lang && !I18N[m.lang]) m.lang = null;
+      return m;
+    } catch (e) { return d; }
+  }
+  function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* privater Modus */ } }
+  let state = load();
+
+  /* ------------------------------------------------------------------
+     HELFER
+     ------------------------------------------------------------------ */
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  function t(key, vars) {
+    const d = I18N[state.lang] || I18N.de;
+    let s = d[key] != null ? d[key] : (I18N.de[key] != null ? I18N.de[key] : key);
+    if (vars) Object.keys(vars).forEach(k => { s = String(s).split('{' + k + '}').join(vars[k]); });
+    return s;
+  }
+  const L = o => (o ? (o[state.lang] || o.de || '') : '');
+  const locale = () => LOCALES[state.lang] || 'de-DE';
+  const fmtDate = ts => new Date(ts).toLocaleDateString(locale(), { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const fmtDateTime = ts => new Date(ts).toLocaleString(locale(), { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const levelOf = xp => Math.floor((Number(xp) || 0) / XP_PER_LEVEL) + 1;
+  const xpPct = () => (state.xp % XP_PER_LEVEL) / XP_PER_LEVEL * 100;
+  const paras = txt => esc(txt).split(/\n\s*\n/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+  const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms || 12); } catch (e) { /* egal */ } };
+  const reduced = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ------------------------------------------------------------------
+     INHALTE INDIZIEREN
+     ------------------------------------------------------------------ */
+  const WORLDS = C.worlds;
+  const worldById = id => WORLDS.find(w => w.id === id);
+  const MISSIONS = {};
+  Object.keys(C.missions || {}).forEach(key => {
+    const cut = key.lastIndexOf('-');
+    const world = key.slice(0, cut), level = parseInt(key.slice(cut + 1), 10);
+    CATS.forEach(cat => (C.missions[key][cat] || []).forEach(m => { MISSIONS[m.id] = { m, world, level, cat }; }));
+  });
+  const missionsOf = (w, n, cat) => ((C.missions[w + '-' + n] || {})[cat]) || [];
+  const allOfLevel = (w, n) => CATS.reduce((a, c) => a.concat(missionsOf(w, n, c)), []);
+  const statusOf = id => (state.missions[id] && state.missions[id].status) || 'open';
+  const isUnlocked = (w, n) => { const wd = worldById(w); return !!wd && (wd.unlocked || []).includes(n); };
+  const countDone = list => list.filter(m => statusOf(m.id) === 'done').length;
+  const levelDone = (w, n) => { const a = allOfLevel(w, n); return a.length > 0 && countDone(a) === a.length; };
+
+  /* ------------------------------------------------------------------
+     DOM
+     ------------------------------------------------------------------ */
+  const $app = $('#app');
+  const $stage = $('#stage');
+  const $toast = $('#toast');
+  const layers = { menu: $('#layerMenu'), sheet: $('#layerSheet'), modal: $('#layerModal') };
+
+  /* ------------------------------------------------------------------
+     ROUTER
+     #/lang  #/setup  #/home  #/book/<welt>  #/level/<welt>/<n>
+     #/missions/<welt>/<n>/<body|mind|soul>  #/page/<name>
+     ------------------------------------------------------------------ */
+  const DEPTH = { lang: 0, setup: 1, home: 2, book: 3, level: 4, missions: 5, page: 6 };
+  let current = { key: null, hash: null, el: null };
+  let nextDir = null;          // erzwungene Übergangsrichtung
+  let navCount = 0;
+  let draft = { name: '', avatar: '' };
+  let worldIdx = 0;
+  let monthOffset = 0;
+  let pendingSheet = null;
+
+  function route() {
+    return location.hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(s => { try { return decodeURIComponent(s); } catch (e) { return s; } });
+  }
+  function go(hash, dir) {
+    if (dir) nextDir = dir;
+    if (location.hash === hash) render();
+    else location.hash = hash;
+  }
+  function goBack(fallback) {
+    nextDir = 'back';
+    if (navCount > 0) history.back();
+    else go(fallback || '#/home', 'back');
+  }
+
+  function resolve() {
+    const r = route(), v = r[0] || '', a = r.slice(1);
+    if (!state.lang || (v === 'lang' && !state.onboarded)) return { key: 'lang', html: viewLang(), chrome: false };
+    if (!state.onboarded) return { key: 'setup', html: viewSetup(), chrome: false };
+    switch (v) {
+      case 'book': return { key: 'book', html: viewBook(a[0]), chrome: true };
+      case 'level': return { key: 'level', html: viewLevel(a[0], parseInt(a[1], 10)), chrome: true };
+      case 'missions': return { key: 'missions', html: viewMissions(a[0], parseInt(a[1], 10), a[2]), chrome: true, noPad: true };
+      case 'page': return { key: 'page', html: viewPage(a[0]), chrome: true };
+      default: return { key: 'home', html: viewHome(), chrome: false };
+    }
+  }
+
+  function render() {
+    applyPrefs();
+    const res = resolve();
+    const hash = location.hash;
+    const same = current.el && current.hash === hash && current.key === res.key;
+
+    const el = document.createElement('section');
+    el.className = `screen screen-${res.key}` + (res.chrome && !res.noPad ? ' with-tb' : '');
+    el.innerHTML = res.html;
+
+    if (same) {
+      const top = current.el.scrollTop;
+      $stage.replaceChild(el, current.el);
+      el.scrollTop = top;
+    } else {
+      let dir = nextDir;
+      if (!dir) {
+        const a = DEPTH[current.key], b = DEPTH[res.key];
+        dir = current.key == null ? 'none' : (b > a ? 'fwd' : b < a ? 'back' : 'fade');
+      }
+      swap(el, dir);
+    }
+    nextDir = null;
+    current = { key: res.key, hash, el };
+
+    $app.classList.toggle('chrome', !!res.chrome);
+    updateTopbar();
+    if (state.onboarded) renderMenu();
+    if (res.key === 'book') initBook(el);
+    if (pendingSheet) { const id = pendingSheet; pendingSheet = null; setTimeout(() => openSheet(id), 260); }
+  }
+
+  function swap(el, dir) {
+    const old = current.el || $('.screen', $stage);
+    $$('.screen', $stage).forEach(s => { if (s !== old) s.remove(); });
+    $stage.appendChild(el);
+    if (!old) return;
+    if (dir === 'none' || reduced()) { old.remove(); return; }
+    old.style.pointerEvents = 'none';
+    el.classList.add('enter-' + dir);
+    old.classList.add('leave-' + dir);
+    let finished = false;
+    const done = () => {
+      if (finished) return;
+      finished = true;
+      old.remove();
+      el.classList.remove('enter-' + dir);
+      el.removeEventListener('animationend', onEnd);
+    };
+    const onEnd = e => { if (e.target === el) done(); };
+    el.addEventListener('animationend', onEnd);
+    setTimeout(done, 600);
+  }
+
+  function updateTopbar() {
+    if (!state.onboarded) return;
+    $('#tbAvatar').textContent = state.avatar;
+    $('#tbName').textContent = state.name;
+    $('#tbLevel').textContent = `${t('level')} ${levelOf(state.xp)} · ${state.xp} XP`;
+    $('#tbBar').style.width = xpPct() + '%';
+  }
+
+  function applyPrefs() {
+    const root = document.documentElement;
+    root.lang = state.lang || 'de';
+    const th = state.settings.theme;
+    if (th === 'light' || th === 'dark') root.dataset.theme = th; else delete root.dataset.theme;
+    const meta = $('meta[name="theme-color"]');
+    const bg = getComputedStyle(root).getPropertyValue('--bg').trim();
+    if (meta && bg) meta.setAttribute('content', bg);
+  }
+
+  /* ------------------------------------------------------------------
+     OVERLAYS (Seitenleiste, Bottom-Sheet, Modal)
+     Jedes Overlay legt einen History-Eintrag an → Zurück-Taste schließt es.
+     ------------------------------------------------------------------ */
+  let openLayer = null;
+  let afterClose = null;
+
+  function showLayer(name) {
+    if (openLayer && openLayer !== name) { hideLayer(openLayer); history.replaceState({ ov: name }, ''); }
+    else if (!openLayer) history.pushState({ ov: name }, '');
+    openLayer = name;
+    layers[name].classList.add('open');
+    layers[name].setAttribute('aria-hidden', 'false');
+  }
+  function hideLayer(name) {
+    layers[name].classList.remove('open');
+    layers[name].setAttribute('aria-hidden', 'true');
+    if (name === 'sheet') sheetId = null;
+  }
+  function closeOverlay(then) {
+    if (!openLayer) { if (then) then(); return; }
+    afterClose = then || null;
+    history.back();
+  }
+  window.addEventListener('popstate', () => {
+    if (!openLayer) return;
+    hideLayer(openLayer);
+    openLayer = null;
+    if (afterClose) { const f = afterClose; afterClose = null; setTimeout(f, 30); }
+  });
+
+  /* Seitenleiste */
+  function renderMenu() {
+    const cur = location.hash;
+    const item = (href, icon, label) => `<button class="mi ${cur === href ? 'active' : ''}" data-nav="${href}"><span class="mi-ico">${icon}</span><span>${esc(label)}</span></button>`;
+    const start = worldById(C.startWorld);
+    const books = (start ? [start] : []).concat(WORLDS.filter(w => w !== start));
+    $('#sidebar').innerHTML = `
+      <div class="sb-head">
+        <span class="avatar lg" style="width:52px;height:52px;font-size:1.6rem;border-width:3px">${esc(state.avatar)}</span>
+        <div class="sb-who"><strong>${esc(state.name)}</strong><small>${esc(t('level'))} ${levelOf(state.xp)} · ${state.xp} XP</small></div>
+        <button class="icon-btn round" data-action="close-overlay" aria-label="${esc(t('close'))}">✕</button>
+      </div>
+      <nav class="sb-nav">
+        ${item('#/home', '🏠', t('home'))}
+        ${item('#/page/character', '🪪', t('character'))}
+        ${item('#/page/logbook', '📜', t('logbook'))}
+        ${item('#/page/diary', '✍️', t('diary'))}
+        <p class="sb-sec">${esc(t('books'))}</p>
+        ${books.map(w => item('#/book/' + w.id, w.icon || '📘', L(w.title))).join('')}
+        <p class="sb-sec">${esc(t('settings'))}</p>
+        ${item('#/page/notifications', '🔔', t('notifications'))}
+        ${item('#/page/design', '🎨', t('design'))}
+        ${item('#/page/language', '🌐', t('language'))}
+        ${item('#/page/monthplan', '🗓️', t('monthplan'))}
+        <p class="sb-sec">${esc(t('community'))}</p>
+        ${item('#/page/group', '👥', t('group'))}
+        ${item('#/page/mentor', '🧭', t('mentor'))}
+        ${item('#/page/help', '❓', t('help'))}
+      </nav>`;
+  }
+
+  /* Modal */
+  function openModal(title, text, btn, guide) {
+    $('#modalGuide').textContent = guide || '🧙‍♂️';
+    $('#modalTitle').textContent = title;
+    $('#modalText').textContent = text;
+    $('#modalBtn').textContent = btn;
+    showLayer('modal');
+    setTimeout(() => $('#modalBtn').focus(), 80);
+  }
+
+  /* Bottom-Sheet: Missionsdetails */
+  let sheetId = null;
+  function openSheet(id) {
+    if (!MISSIONS[id]) return;
+    sheetId = id;
+    renderSheet();
+    showLayer('sheet');
+  }
+  function renderSheet() {
+    const info = MISSIONS[sheetId];
+    if (!info) return;
+    const { m, level, cat } = info;
+    const st = statusOf(sheetId), rec = state.missions[sheetId];
+    let foot;
+    if (st === 'open') foot = `<button class="btn cat-btn lg block" data-action="accept" data-id="${esc(sheetId)}">${esc(t('acceptMission'))}</button>`;
+    else if (st === 'active') foot = `<p class="note">${esc(t('acceptedOn', { d: fmtDate(rec.acceptedAt) }))}</p>
+      <button class="btn cat-btn lg block" data-action="complete" data-id="${esc(sheetId)}">✓ ${esc(t('completeMission'))}</button>`;
+    else foot = `<div class="done-banner">✓ ${esc(t('doneOn', { d: fmtDate(rec.doneAt) }))}</div>`;
+    const stLabel = st === 'done' ? t('statusDone') : st === 'active' ? t('statusActive') : t('statusOpen');
+    const sheet = $('#sheet');
+    sheet.className = 'sheet cat-' + cat;
+    sheet.innerHTML = `
+      <div class="grab" id="grab"><span></span></div>
+      <div class="sheet-body">
+        <div class="sh-top">
+          <span class="sh-chip">${CAT_ICON[cat]} ${esc(t(cat))}</span>
+          <button class="icon-btn round" data-action="close-overlay" aria-label="${esc(t('close'))}">✕</button>
+        </div>
+        <h2 class="sh-title">${esc(L(m.title))}</h2>
+        <div class="sh-meta">
+          <span class="tag">${esc(t('levelN', { n: level }))}</span>
+          <span class="tag">+${Number(m.xp) || 0} XP</span>
+          <span class="tag st">${esc(stLabel)}</span>
+        </div>
+        <div class="prose">${paras(L(m.text))}</div>
+      </div>
+      <div class="sheet-foot">${foot}</div>`;
+    initSheetDrag();
+  }
+  function initSheetDrag() {
+    const grab = $('#grab'), sheet = $('#sheet');
+    if (!grab) return;
+    let y0 = null, dy = 0;
+    grab.addEventListener('touchstart', e => { y0 = e.touches[0].clientY; dy = 0; sheet.classList.add('dragging'); }, { passive: true });
+    grab.addEventListener('touchmove', e => {
+      if (y0 === null) return;
+      dy = Math.max(0, e.touches[0].clientY - y0);
+      sheet.style.transform = `translateY(${dy}px)`;
+    }, { passive: true });
+    const end = () => {
+      if (y0 === null) return;
+      sheet.classList.remove('dragging');
+      sheet.style.transform = '';
+      if (dy > 90) closeOverlay();
+      y0 = null;
+    };
+    grab.addEventListener('touchend', end);
+    grab.addEventListener('touchcancel', end);
+  }
+
+  /* Toast */
+  let toastTimer = null;
+  function toast(msg) {
+    $toast.textContent = msg;
+    $toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => $toast.classList.remove('show'), 2300);
+  }
+
+  /* ------------------------------------------------------------------
+     ONBOARDING
+     ------------------------------------------------------------------ */
+  const steps = n => `<div class="steps">${CATS.map((c, i) => `<span class="cat-${c} ${i < n ? 'on' : ''}"></span>`).join('')}</div>`;
+
+  function viewLang() {
+    return `
+      <div class="brand"><div class="brand-mark">📖</div><h1>Avalon</h1><p class="muted">Sprache · Language · Idioma</p></div>
+      <div class="choice-list">
+        ${LANGS.map(l => `<button class="choice ${state.lang === l.id ? 'is-selected' : ''}" data-action="set-lang" data-lang="${l.id}">
+          <span class="flag">${l.flag}</span><span class="grow">${l.label}</span><span class="chev">›</span></button>`).join('')}
+      </div>
+      ${steps(1)}`;
+  }
+
+  function avatarGrid(sel) {
+    return `<div class="avatar-grid" role="radiogroup">${AVATARS.map(a => `
+      <button type="button" class="avatar-opt ${a === sel ? 'is-selected' : ''}" data-action="pick-avatar" data-avatar="${a}" role="radio" aria-checked="${a === sel}">${a}</button>`).join('')}</div>`;
+  }
+  const draftValid = () => !!(draft.name.trim() && draft.avatar);
+
+  function viewSetup() {
+    if (!draft.name) draft.name = state.name;
+    if (!draft.avatar) draft.avatar = state.avatar;
+    return `
+      <div class="s-head" style="margin-bottom:0">
+        <button class="icon-btn round" data-action="back-to" data-to="#/lang" aria-label="${esc(t('back'))}">‹</button>
+        <span class="grow"></span>${steps(2)}<span class="grow"></span><span style="width:42px"></span>
+      </div>
+      <div class="setup-hero">
+        <div class="avatar xl" id="avPreview">${esc(draft.avatar || '?')}</div>
+        <h1>${esc(t('createProfile'))}</h1>
+      </div>
+      <form id="setupForm" class="stack" novalidate autocomplete="off">
+        <label class="field"><span class="label">${esc(t('yourName'))}</span>
+          <input id="nameInput" type="text" maxlength="24" value="${esc(draft.name)}" placeholder="${esc(t('namePh'))}" enterkeyhint="done"></label>
+        <div class="field"><span class="label">${esc(t('chooseAvatar'))}</span>${avatarGrid(draft.avatar)}</div>
+        <div class="sticky-foot"><button class="btn primary lg block" id="setupBtn" type="submit" ${draftValid() ? '' : 'disabled'}>${esc(t('continue'))}</button></div>
+      </form>`;
+  }
+
+  function submitSetup() {
+    if (!draftValid()) { toast(t('nameRequired')); return; }
+    state.name = draft.name.trim().slice(0, 24);
+    state.avatar = draft.avatar;
+    state.onboarded = true;
+    save();
+    go('#/home', 'fade');
+    setTimeout(() => openModal(t('welcomeTitle', { name: state.name }), t('welcomeText'), t('letsGo')), 450);
+  }
+
+  /* ------------------------------------------------------------------
+     HAUPTSEITE – Visitenkarte
+     ------------------------------------------------------------------ */
+  function currentMission(cat) {
+    const ids = Object.keys(state.missions)
+      .filter(id => MISSIONS[id] && MISSIONS[id].cat === cat && statusOf(id) === 'active')
+      .sort((a, b) => (state.missions[b].acceptedAt || 0) - (state.missions[a].acceptedAt || 0));
+    return ids.length ? MISSIONS[ids[0]] : null;
+  }
+
+  function viewHome() {
+    const rest = state.xp % XP_PER_LEVEL;
+    return `
+      <article class="id-card" id="idCard">
+        <div class="id-top">
+          <span class="eyebrow">${esc(t('playerCard'))}</span>
+          <button class="icon-btn" data-action="menu" aria-label="${esc(t('menu'))}"><span class="burger"><i></i><i></i><i></i></span></button>
+        </div>
+        <div class="id-main">
+          <div class="avatar xl">${esc(state.avatar)}</div>
+          <h1 class="id-name">${esc(state.name)}</h1>
+          <span class="lvl-chip">${esc(t('level'))} ${levelOf(state.xp)} <b>· ${state.xp} XP</b></span>
+          <div class="xpbar"><span style="width:${xpPct()}%"></span></div>
+          <span class="xp-note">${esc(t('toNext', { n: XP_PER_LEVEL - rest }))}</span>
+        </div>
+        <p class="eyebrow" style="margin-bottom:10px">${esc(t('currentMissions'))}</p>
+        <div class="cur-list">
+          ${CATS.map(cat => {
+            const cm = currentMission(cat);
+            return `<button class="cur cat-${cat}" data-action="home-mission" data-cat="${cat}" data-id="${cm ? esc(cm.m.id) : ''}">
+              <span class="cur-dot">${CAT_ICON[cat]}</span>
+              <span class="cur-text"><small>${esc(t(cat))}</small>
+                <strong class="${cm ? '' : 'none'}">${cm ? esc(L(cm.m.title)) : esc(t('noActive'))}</strong></span>
+              <span class="chev">›</span></button>`;
+          }).join('')}
+        </div>
+      </article>
+      <button class="btn primary lg block cta-book home-cta" id="ctaBook" data-action="open-book"><span class="ico">📖</span>${esc(t('openBook'))}</button>`;
+  }
+
+  function openBook() {
+    const card = $('#idCard'), cta = $('#ctaBook');
+    if (card) card.classList.add('collapsing');
+    if (cta) cta.classList.add('collapsing');
+    $app.classList.add('chrome'); updateTopbar();       // Leiste fährt schon ein
+    setTimeout(() => go('#/book/' + C.startWorld, 'fade'), reduced() ? 0 : 320);
+  }
+
+  /* ------------------------------------------------------------------
+     BUCH – Welten-Karussell (Scroll-Snap)
+     ------------------------------------------------------------------ */
+  const ROW_H = 92;
+  const XS = [50, 76, 50, 24];
+
+  function viewBook(id) {
+    let i = WORLDS.findIndex(w => w.id === id);
+    if (i < 0) i = Math.max(0, WORLDS.findIndex(w => w.id === C.startWorld));
+    worldIdx = i;
+    return `
+      <div class="tabs" role="tablist">
+        ${WORLDS.map((w, k) => `<button class="tab ${k === i ? 'on' : ''}" role="tab" data-action="world-goto" data-idx="${k}">${w.icon || ''} ${esc(L(w.tab) || L(w.title))}</button>`).join('')}
+      </div>
+      <div class="carousel" id="carousel">${WORLDS.map(worldCard).join('')}</div>
+      <div class="book-foot">
+        <div class="dots">${WORLDS.map((w, k) => `<i class="${k === i ? 'on' : ''}"></i>`).join('')}</div>
+        <span class="hint">${esc(t('swipeHint'))}</span>
+      </div>`;
+  }
+
+  function worldCard(w, k) {
+    const open = w.unlocked || [];
+    const locked = open.length === 0;
+    const n = w.levels;
+    const H = n * ROW_H;
+    const pts = [];
+    for (let i = 0; i < n; i++) pts.push([XS[i % XS.length], ROW_H / 2 + i * ROW_H]);
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 1; i < pts.length; i++) {
+      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
+      d += ` C ${x0} ${y0 + ROW_H / 2}, ${x1} ${y1 - ROW_H / 2}, ${x1} ${y1}`;
+    }
+    const nodes = pts.map(([x, y], i) => {
+      const lv = i + 1, isOpen = open.includes(lv), done = isOpen && levelDone(w.id, lv);
+      const label = t('levelN', { n: lv }) + (isOpen ? '' : ' – ' + t('lockedShort'));
+      return `<div class="node" style="left:${x}%;top:${y}px">
+        <button class="lvl ${isOpen ? 'open' : 'locked'} ${done ? 'done' : ''}" ${isOpen ? `data-action="open-level" data-world="${w.id}" data-level="${lv}"` : 'data-action="locked"'} aria-label="${esc(label)}">
+          ${done ? '✓' : isOpen ? lv : '<span class="lock">🔒</span>'}</button>
+        <span class="node-cap ${isOpen && !done ? 'go' : ''}">${isOpen && !done ? '▶ ' + esc(t('start')) : esc(t('levelN', { n: lv }))}</span>
+      </div>`;
+    }).join('');
+    return `
+      <article class="wcard ${locked ? 'is-locked' : ''} ${k === worldIdx ? 'is-active' : ''}" data-idx="${k}">
+        <header class="wcard-head">
+          <div class="w-icon">${w.icon || '📘'}</div>
+          <span class="eyebrow">${esc(t('worldOf', { i: k + 1, n: WORLDS.length }))}</span>
+          <h2 class="w-title">${esc(L(w.title))}</h2>
+          <span class="w-badge">${locked ? '🔒 ' + esc(t('soon')) : esc(t('levelsOpen', { o: open.length, n }))}</span>
+        </header>
+        <div class="path-wrap">
+          <div class="path" style="height:${H}px">
+            <svg viewBox="0 0 100 ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" vector-effect="non-scaling-stroke"/></svg>
+            ${nodes}
+          </div>
+        </div>
+      </article>`;
+  }
+
+  function cardLeft(car, idx) {
+    const card = car.children[idx];
+    return card ? card.offsetLeft - (car.clientWidth - card.offsetWidth) / 2 : 0;
+  }
+
+  function markWorld(idx) {
+    worldIdx = idx;
+    const scr = current.el;
+    if (!scr) return;
+    $$('.tab', scr).forEach((b, k) => b.classList.toggle('on', k === idx));
+    $$('.dots i', scr).forEach((b, k) => b.classList.toggle('on', k === idx));
+    $$('.wcard', scr).forEach((c, k) => c.classList.toggle('is-active', k === idx));
+    const h = '#/book/' + WORLDS[idx].id;
+    if (location.hash !== h) { history.replaceState(history.state, '', h); current.hash = h; }
+    renderMenu();
+  }
+
+  function scrollToWorld(idx, smooth) {
+    const car = current.el && $('#carousel', current.el);
+    if (!car) return;
+    idx = Math.max(0, Math.min(WORLDS.length - 1, idx));
+    car.scrollTo({ left: cardLeft(car, idx), behavior: smooth && !reduced() ? 'smooth' : 'auto' });
+    markWorld(idx);
+  }
+
+  function initBook(scr) {
+    const car = $('#carousel', scr);
+    if (!car) return;
+    const place = () => { car.scrollLeft = cardLeft(car, worldIdx); };
+    place();
+    requestAnimationFrame(place);
+    let raf = null;
+    car.addEventListener('scroll', () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        const mid = car.scrollLeft + car.clientWidth / 2;
+        let best = 0, bestDist = Infinity;
+        Array.from(car.children).forEach((c, k) => {
+          const dist = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+          if (dist < bestDist) { bestDist = dist; best = k; }
+        });
+        if (best !== worldIdx) markWorld(best);
+      });
+    }, { passive: true });
+  }
+
+  /* ------------------------------------------------------------------
+     STUFE – Körper / Geist / Seele
+     ------------------------------------------------------------------ */
+  function headBack(title, eyebrow, to) {
+    return `<div class="s-head">
+      <button class="icon-btn round" data-action="back-to" data-to="${esc(to)}" aria-label="${esc(t('back'))}">‹</button>
+      <div class="titles">${eyebrow ? `<span class="eyebrow">${esc(eyebrow)}</span>` : ''}<h1>${esc(title)}</h1></div>
+    </div>`;
+  }
+
+  function viewLocked(w) {
+    return headBack(t('locked'), '', '#/book/' + (worldById(w) ? w : C.startWorld)) +
+      `<div class="card ph"><div class="big">🔒</div><p class="muted">${esc(t('locked'))}</p></div>`;
+  }
+
+  function viewLevel(w, n) {
+    const wd = worldById(w);
+    if (!wd || !isUnlocked(w, n)) return viewLocked(w);
+    const all = allOfLevel(w, n);
+    const intro = (C.levelIntros || {})[w + '-' + n];
+    return `
+      ${headBack(L(wd.title), t('books'), '#/book/' + w).replace('<h1>', '<h1 style="font-size:1.05rem">')}
+      <div class="lvl-hero">
+        <div class="lvl-badge">${n}</div>
+        <div><h1>${esc(t('levelN', { n }))}</h1><p class="muted small">${esc(t('missionsDone', { d: countDone(all), n: all.length }))}</p></div>
+      </div>
+      <p class="eyebrow" style="margin-bottom:10px">${esc(t('chooseArea'))}</p>
+      <div class="cat-row">
+        ${CATS.map(cat => {
+          const list = missionsOf(w, n, cat), d = countDone(list);
+          const pct = list.length ? d / list.length * 100 : 0;
+          return `<button class="cat-card cat-${cat}" data-action="open-cat" data-to="#/missions/${w}/${n}/${cat}">
+            <span class="cat-ico">${CAT_ICON[cat]}</span>
+            <strong>${esc(t(cat))}</strong>
+            <span class="cat-prog"><small>${d}/${list.length}</small><span class="bar"><span style="width:${pct}%"></span></span></span>
+          </button>`;
+        }).join('')}
+      </div>
+      ${intro ? `<div class="card intro">${paras(L(intro))}</div>` : ''}`;
+  }
+
+  /* ------------------------------------------------------------------
+     MISSIONEN
+     ------------------------------------------------------------------ */
+  function missionCard(m) {
+    const st = statusOf(m.id);
+    let action;
+    if (st === 'done') action = `<span class="done-txt">✓ ${esc(t('completed'))}</span>`;
+    else if (st === 'active') action = `<button class="btn soft sm" data-action="open-mission" data-id="${esc(m.id)}">${esc(t('continueMission'))} ›</button>`;
+    else action = `<button class="btn cat-btn sm" data-action="accept" data-id="${esc(m.id)}">${esc(t('acceptMission'))}</button>`;
+    return `<li class="m-card st-${st}">
+      <button class="m-open" data-action="open-mission" data-id="${esc(m.id)}">
+        <span class="titles"><strong>${esc(L(m.title))}</strong><p>${esc(L(m.short))}</p></span><span class="chev">›</span>
+      </button>
+      <div class="m-foot">
+        <span class="tags"><span class="tag">+${Number(m.xp) || 0} XP</span>${st === 'active' ? `<span class="tag st">${esc(t('statusActive'))}</span>` : ''}</span>
+        ${action}
+      </div>
+    </li>`;
+  }
+
+  function viewMissions(w, n, cat) {
+    const wd = worldById(w);
+    if (!wd || !isUnlocked(w, n) || !CATS.includes(cat)) return `<div style="padding:16px 18px">${viewLocked(w)}</div>`;
+    const list = missionsOf(w, n, cat), d = countDone(list);
+    return `
+      <div class="cat-${cat}">
+        <div class="m-hero">
+          <div class="s-head">
+            <button class="icon-btn round" data-action="back-to" data-to="#/level/${w}/${n}" aria-label="${esc(t('back'))}">‹</button>
+            <span class="eyebrow">${esc(L(wd.title))} · ${esc(t('levelN', { n }))}</span>
+          </div>
+          <div class="m-hero-row">
+            <span class="cat-ico">${CAT_ICON[cat]}</span>
+            <div><h1>${esc(t(cat))}</h1><p class="small" style="color:var(--c-ink)">${esc(t('missionsDone', { d, n: list.length }))}</p></div>
+          </div>
+          <div class="bar"><span style="width:${list.length ? d / list.length * 100 : 0}%"></span></div>
+        </div>
+        <div class="seg">
+          ${CATS.map(c => `<button class="cat-${c} ${c === cat ? 'on' : ''}" data-action="switch-cat" data-to="#/missions/${w}/${n}/${c}">${CAT_ICON[c]} ${esc(t(c))}</button>`).join('')}
+        </div>
+        ${list.length ? `<ul class="m-list">${list.map(missionCard).join('')}</ul>
+          <p class="note" style="margin:16px 0 4px">${esc(t('tapToOpen'))}</p>`
+          : `<div style="padding:16px 18px"><p class="empty">${esc(t('noMissions'))}</p></div>`}
+      </div>`;
+  }
+
+  function accept(id) {
+    if (!MISSIONS[id] || statusOf(id) !== 'open') return;
+    state.missions[id] = { status: 'active', acceptedAt: Date.now() };
+    save(); buzz(15);
+    render();
+    if (sheetId === id) renderSheet();
+    toast('✨ ' + t('acceptedToast'));
+  }
+
+  function complete(id) {
+    const info = MISSIONS[id];
+    if (!info || statusOf(id) !== 'active') return;
+    const before = levelOf(state.xp);
+    state.missions[id].status = 'done';
+    state.missions[id].doneAt = Date.now();
+    state.xp += Number(info.m.xp) || 0;
+    save(); buzz([15, 40, 15]);
+    render();
+    if (sheetId === id) renderSheet();
+    const after = levelOf(state.xp);
+    if (after > before) closeOverlay(() => openModal(t('levelUpTitle', { n: after }), t('levelUpText'), t('ok'), '🏆'));
+    else toast('🎉 ' + t('completedToast', { xp: Number(info.m.xp) || 0 }));
+  }
+
+  /* ------------------------------------------------------------------
+     MENÜSEITEN
+     ------------------------------------------------------------------ */
+  function shell(titleKey, icon, body) {
+    return `<div class="s-head">
+        <button class="icon-btn round" data-action="page-back" aria-label="${esc(t('back'))}">‹</button>
+        <div class="titles"><h1>${icon} ${esc(t(titleKey))}</h1></div>
+      </div>${body}`;
+  }
+
+  function viewPage(key) {
+    const P = {
+      character: pageCharacter, logbook: pageLogbook, diary: pageDiary,
+      notifications: pageNotifications, design: pageDesign, language: pageLanguage, monthplan: pageMonthplan,
+      group: () => pagePh('group', '👥'), mentor: () => pagePh('mentor', '🧭'), help: pageHelp
+    };
+    return P[key] ? P[key]() : shell('notFound', '🧭', `<div class="card ph"><p class="muted">${esc(t('notFound'))}</p></div>`);
+  }
+
+  function pageCharacter() {
+    draft = { name: state.name, avatar: state.avatar };
+    const recs = Object.values(state.missions);
+    return shell('character', '🪪', `
+      <div class="card stats">
+        <div><strong>${levelOf(state.xp)}</strong><small>${esc(t('level'))}</small></div>
+        <div><strong>${state.xp}</strong><small>XP</small></div>
+        <div><strong>${recs.filter(r => r.status === 'active').length}</strong><small>${esc(t('statusActive'))}</small></div>
+        <div><strong>${recs.filter(r => r.status === 'done').length}</strong><small>${esc(t('statusDone'))}</small></div>
+      </div>
+      <form id="charForm" class="card stack" novalidate autocomplete="off">
+        <div class="setup-hero" style="padding:0"><div class="avatar xl" id="avPreview">${esc(draft.avatar)}</div></div>
+        <label class="field"><span class="label">${esc(t('yourName'))}</span>
+          <input id="nameInput" type="text" maxlength="24" value="${esc(draft.name)}"></label>
+        <div class="field"><span class="label">${esc(t('chooseAvatar'))}</span>${avatarGrid(draft.avatar)}</div>
+        <button class="btn primary block" type="submit">${esc(t('save'))}</button>
+      </form>
+      <div style="margin-top:16px"><button class="btn danger block" data-action="reset">${esc(t('reset'))}</button></div>`);
+  }
+
+  function pageLogbook() {
+    const ids = Object.keys(state.missions).filter(id => MISSIONS[id]);
+    const last = id => state.missions[id].doneAt || state.missions[id].acceptedAt || 0;
+    ids.sort((a, b) => last(b) - last(a));
+    if (!ids.length) return shell('logbook', '📜', `<div class="empty"><span class="big">📜</span>${esc(t('logEmpty'))}</div>`);
+    const act = ids.filter(id => statusOf(id) === 'active').length, done = ids.filter(id => statusOf(id) === 'done').length;
+    return shell('logbook', '📜', `
+      <p class="muted small" style="margin-bottom:12px">${esc(t('logSummary', { a: act, d: done, xp: state.xp }))}</p>
+      <div class="list">${ids.map(id => {
+        const { m, cat } = MISSIONS[id], r = state.missions[id];
+        const line = r.status === 'done' ? t('doneOn', { d: fmtDate(r.doneAt) }) : t('acceptedOn', { d: fmtDate(r.acceptedAt) });
+        return `<button class="row cat-${cat}" data-action="open-mission" data-id="${esc(id)}">
+          <span class="dot"></span>
+          <span class="titles"><strong>${esc(L(m.title))}</strong><small>${esc(t(cat))} · ${esc(line)}</small></span>
+          <span>${r.status === 'done' ? '✅' : '⏳'}</span></button>`;
+      }).join('')}</div>`);
+  }
+
+  function pageDiary() {
+    const entries = state.diary.slice().sort((a, b) => b.ts - a.ts);
+    return shell('diary', '✍️', `
+      <form id="diaryForm" class="card stack">
+        <textarea id="diaryText" rows="4" maxlength="4000" placeholder="${esc(t('diaryPh'))}"></textarea>
+        <button class="btn primary block" type="submit">${esc(t('addEntry'))}</button>
+      </form>
+      <div style="margin-top:12px">
+        ${entries.length ? entries.map(e => `
+          <div class="card">
+            <div class="entry-head"><small>${esc(fmtDateTime(e.ts))}</small>
+              <button class="link danger" data-action="diary-del" data-id="${esc(e.id)}">${esc(t('delete'))}</button></div>
+            <div class="prose">${paras(e.text)}</div>
+          </div>`).join('') : `<div class="empty"><span class="big">📓</span>${esc(t('diaryEmpty'))}</div>`}
+      </div>`);
+  }
+
+  function pageNotifications() {
+    const sup = 'Notification' in window;
+    const perm = sup ? Notification.permission : 'unsupported';
+    const note = !sup ? t('notifUnsupported') : perm === 'denied' ? t('notifDenied') : '';
+    const canTest = sup && perm === 'granted' && state.settings.notifications;
+    return shell('notifications', '🔔', `
+      <div class="card">
+        <label class="row-switch">
+          <span><strong>${esc(t('notifReminders'))}</strong><small>${esc(t('notifText'))}</small></span>
+          <input type="checkbox" class="switch" data-action="toggle-notif" ${state.settings.notifications ? 'checked' : ''}>
+        </label>
+        ${note ? `<p class="note" style="margin-top:12px">${esc(note)}</p>` : ''}
+        ${canTest ? `<div style="margin-top:14px"><button class="btn block" data-action="notif-test">${esc(t('notifTest'))}</button></div>` : ''}
+      </div>`);
+  }
+
+  function toggleNotif(el) {
+    const want = el.checked;
+    if (want && 'Notification' in window && Notification.permission !== 'granted') {
+      let handled = false;
+      const handle = p => {
+        if (handled) return; handled = true;
+        state.settings.notifications = p === 'granted'; save(); render();
+        if (p !== 'granted') toast(t('notifDenied'));
+      };
+      try {
+        const r = Notification.requestPermission(handle);
+        if (r && typeof r.then === 'function') r.then(handle, () => handle('denied'));
+      } catch (e) { handle('denied'); }
+      return;
+    }
+    state.settings.notifications = want; save(); render();
+  }
+
+  function pageDesign() {
+    const th = state.settings.theme;
+    const opt = (id, icon, label) => `<button class="choice ${th === id ? 'is-selected' : ''}" data-action="set-theme" data-theme="${id}">
+      <span class="flag">${icon}</span><span class="grow">${esc(label)}</span><span class="chev">${th === id ? '✓' : ''}</span></button>`;
+    return shell('design', '🎨', `
+      <div class="choice-list">${opt('light', '☀️', t('themeLight'))}${opt('dark', '🌙', t('themeDark'))}${opt('system', '📱', t('themeSystem'))}</div>
+      <p class="eyebrow" style="margin:22px 0 10px">${esc(t('colorLegend'))}</p>
+      <div class="legend">${CATS.map(c => `<div class="cat-${c}"><i></i>${esc(t(c))}</div>`).join('')}</div>`);
+  }
+
+  function pageLanguage() {
+    return shell('language', '🌐', `<div class="choice-list">${LANGS.map(l => `
+      <button class="choice ${state.lang === l.id ? 'is-selected' : ''}" data-action="change-lang" data-lang="${l.id}">
+        <span class="flag">${l.flag}</span><span class="grow">${l.label}</span><span class="chev">${state.lang === l.id ? '✓' : ''}</span></button>`).join('')}</div>`);
+  }
+
+  function pageMonthplan() {
+    const now = new Date();
+    const ref = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+    const y = ref.getFullYear(), mo = ref.getMonth();
+    const days = new Date(y, mo + 1, 0).getDate();
+    const lead = (ref.getDay() + 6) % 7;
+    const act = new Set();
+    const mark = ts => { if (!ts) return; const d = new Date(ts); if (d.getFullYear() === y && d.getMonth() === mo) act.add(d.getDate()); };
+    Object.values(state.missions).forEach(r => { mark(r.acceptedAt); mark(r.doneAt); });
+    state.diary.forEach(e => mark(e.ts));
+    let cells = (I18N[state.lang] || I18N.de).wd.map(w => `<div class="wd">${esc(w)}</div>`).join('');
+    for (let i = 0; i < lead; i++) cells += '<div></div>';
+    for (let d = 1; d <= days; d++) cells += `<div class="d ${monthOffset === 0 && d === now.getDate() ? 'today' : ''} ${act.has(d) ? 'act' : ''}">${d}</div>`;
+    return shell('monthplan', '🗓️', `
+      <div class="card">
+        <div class="cal-head">
+          <button class="icon-btn round" data-action="month" data-dir="-1">‹</button>
+          <strong>${esc(ref.toLocaleDateString(locale(), { month: 'long', year: 'numeric' }))}</strong>
+          <button class="icon-btn round" data-action="month" data-dir="1">›</button>
+        </div>
+        <div class="cal">${cells}</div>
+        <div class="cal-legend"><i></i>${esc(t('monthLegend'))}</div>
+      </div>
+      <div class="card ph"><div class="big">🎯</div><p class="muted">${esc(t('monthPlaceholder'))}</p></div>`);
+  }
+
+  function pagePh(key, icon) {
+    return shell(key, icon, `<div class="card ph"><div class="big">${icon}</div>
+      <p><strong>${esc(t(key + 'Text'))}</strong></p><p class="muted small">${esc(t('placeholder'))}</p></div>`);
+  }
+
+  function pageHelp() {
+    return shell('help', '❓', `
+      <p class="eyebrow" style="margin-bottom:10px">${esc(t('helpText'))}</p>
+      ${[1, 2, 3].map(i => `<details class="card"><summary>${esc(t('faq' + i + 'q'))}</summary><p>${esc(t('faq' + i + 'a'))}</p></details>`).join('')}`);
+  }
+
+  /* ------------------------------------------------------------------
+     AKTIONEN
+     ------------------------------------------------------------------ */
+  function act(action, el) {
+    switch (action) {
+      case 'set-lang': state.lang = el.dataset.lang; save(); go('#/setup', 'fwd'); break;
+      case 'pick-avatar': {
+        draft.avatar = el.dataset.avatar;
+        $$('.avatar-opt', el.parentElement).forEach(b => { const on = b === el; b.classList.toggle('is-selected', on); b.setAttribute('aria-checked', String(on)); });
+        const pv = $('#avPreview');
+        if (pv) { pv.textContent = draft.avatar; pv.classList.remove('pop'); void pv.offsetWidth; pv.classList.add('pop'); }
+        const btn = $('#setupBtn'); if (btn) btn.disabled = !draftValid();
+        buzz(8);
+        break;
+      }
+      case 'back-to': go(el.dataset.to, 'back'); break;
+      case 'page-back': goBack('#/book/' + C.startWorld); break;
+      case 'go-home': go('#/home', 'fade'); break;
+      case 'open-book': openBook(); break;
+      case 'menu': showLayer('menu'); break;
+      case 'close-overlay': closeOverlay(); break;
+      case 'world-goto': scrollToWorld(parseInt(el.dataset.idx, 10) || 0, true); break;
+      case 'locked': toast('🔒 ' + t('locked')); buzz(25); break;
+      case 'open-level': go(`#/level/${el.dataset.world}/${el.dataset.level}`, 'fwd'); break;
+      case 'open-cat': go(el.dataset.to, 'fwd'); break;
+      case 'switch-cat': go(el.dataset.to, 'fade'); break;
+      case 'home-mission': {
+        const id = el.dataset.id;
+        const target = id ? `#/missions/${MISSIONS[id].world}/${MISSIONS[id].level}/${el.dataset.cat}` : `#/missions/${C.startWorld}/1/${el.dataset.cat}`;
+        if (id) pendingSheet = id;
+        $app.classList.add('chrome');
+        go(target, 'fwd');
+        break;
+      }
+      case 'open-mission': openSheet(el.dataset.id); break;
+      case 'accept': accept(el.dataset.id); break;
+      case 'complete': complete(el.dataset.id); break;
+      case 'reset':
+        if (confirm(t('resetConfirm'))) {
+          try { localStorage.removeItem(STORE_KEY); } catch (e) { /* egal */ }
+          state = defaults(); draft = { name: '', avatar: '' }; navCount = 0;
+          go('#/lang', 'fade');
+        }
+        break;
+      case 'diary-del':
+        if (confirm(t('deleteConfirm'))) { state.diary = state.diary.filter(e => e.id !== el.dataset.id); save(); render(); }
+        break;
+      case 'toggle-notif': toggleNotif(el); break;
+      case 'notif-test':
+        try { new Notification('Avalon', { body: t('notifTestBody') }); } catch (e) { toast(t('notifUnsupported')); }
+        break;
+      case 'set-theme': state.settings.theme = el.dataset.theme; save(); render(); break;
+      case 'change-lang': state.lang = el.dataset.lang; save(); render(); toast('✓ ' + t('saved')); break;
+      case 'month': monthOffset += parseInt(el.dataset.dir, 10) || 0; render(); break;
+    }
+  }
+
+  document.addEventListener('click', e => {
+    const nav = e.target.closest('[data-nav]');
+    if (nav) { e.preventDefault(); const h = nav.dataset.nav; closeOverlay(() => go(h)); return; }
+    const el = e.target.closest('[data-action]');
+    if (el) act(el.dataset.action, el);
+  });
+  document.addEventListener('submit', e => {
+    e.preventDefault();
+    if (e.target.id === 'setupForm') submitSetup();
+    else if (e.target.id === 'charForm') {
+      if (!draftValid()) { toast(t('nameRequired')); return; }
+      state.name = draft.name.trim().slice(0, 24); state.avatar = draft.avatar;
+      save(); render(); toast('✓ ' + t('saved'));
+    } else if (e.target.id === 'diaryForm') {
+      const v = ($('#diaryText').value || '').trim();
+      if (!v) return;
+      state.diary.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), ts: Date.now(), text: v });
+      save(); render(); toast('✓ ' + t('saved'));
+    }
+  });
+  document.addEventListener('input', e => {
+    if (e.target.id === 'nameInput') {
+      draft.name = e.target.value;
+      const btn = $('#setupBtn'); if (btn) btn.disabled = !draftValid();
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && openLayer) { closeOverlay(); return; }
+    if (openLayer || current.key !== 'book' || /INPUT|TEXTAREA/.test(e.target.tagName || '')) return;
+    if (e.key === 'ArrowLeft') scrollToWorld(worldIdx - 1, true);
+    if (e.key === 'ArrowRight') scrollToWorld(worldIdx + 1, true);
+  });
+  window.addEventListener('hashchange', () => {
+    navCount++;
+    if (openLayer) { hideLayer(openLayer); openLayer = null; }
+    render();
+  });
+
+  /* Start */
+  render();
+})();
+
+  </script>
+</body>
+</html>
